@@ -1,6 +1,8 @@
 package POJO;
 
 import java.io.Serializable;
+import DAO.PersonDAO;
+import DAO.Dao;
 
 @SuppressWarnings("serial")
 public class Person implements Serializable {
@@ -11,6 +13,7 @@ public class Person implements Serializable {
 	protected String emailAddress;
 	protected String password;
 	private String role;
+	private Dao<Person> dao = new PersonDAO();
 	
 	public Person() { 
 		super();
@@ -55,12 +58,16 @@ public class Person implements Serializable {
 	
 	@Override
 	public String toString() {
-		return "Person [id=" + id + ", firstname=" + firstname + ", lastname=" + lastname + ", adress=" + adress
-				+ ", emailAddress=" + emailAddress + ", password=" + password + ", role=" + role + "]";
+		return "Person : id=" + id + ", firstname=" + firstname + ", lastname=" + lastname + ", adress=" + adress
+				+ ", emailAddress=" + emailAddress + ", password=" + password + ", role=" + role;
 	}
 
-	private void crypt() {
+	protected void crypt() {
 		int crypt = password.concat("mdp").hashCode();
 		this.password = crypt+"";
+	}
+	
+	public Person getOne() {
+		return dao.get(this);
 	}
 }

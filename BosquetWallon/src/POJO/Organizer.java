@@ -1,8 +1,12 @@
 package POJO;
 
+import DAO.Dao;
+import DAO.OrganizerDAO;
+
 @SuppressWarnings("serial")
 public class Organizer extends Person {
 	private String phoneNumber;
+	private Dao<Organizer> dao = new OrganizerDAO();
 	
 	public Organizer() {
 		super();
@@ -19,5 +23,13 @@ public class Organizer extends Person {
 	}
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
+	}
+	
+	public String toString() {
+		return super.toString() + " phoneNumber=" + phoneNumber;
+	}
+
+	public Organizer getOne() {
+		return dao.get(this);
 	}
 }
