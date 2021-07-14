@@ -24,12 +24,14 @@ public class Artist extends Person {
 	public String toString() {
 		return super.toString() + " showname=" + showname;
 	}
-
-	public Artist getOne() {
-		return dao.get(this);
-	}
 	
+	public boolean create() {
+		return dao.create(this);
+	}
 	public ArrayList<Artist> getAll() {
 		return dao.getList();
+	}
+	public Artist getOne() {
+		return dao.get(this);
 	}
 }

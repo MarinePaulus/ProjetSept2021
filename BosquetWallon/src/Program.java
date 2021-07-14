@@ -1,3 +1,4 @@
+import java.util.Date;
 import java.util.Iterator;
 
 import DAO.*;
@@ -16,7 +17,7 @@ public class Program {
 		else System.out.println(m.toString());
 		
 		System.out.println("***********************************************************************************************************************");
-		
+			
 		Person p2 = new Person();
 		p2.setEmailAddress("haddock@gmail.com");
 		p2 = p2.getOne();
@@ -24,10 +25,17 @@ public class Program {
 		o.setPassword("1624974620");
 		o = o.getOne();
 		if(o==null) System.out.println("Mot de passe incorrect");
-		else System.out.println(o.toString());
-
-		System.out.println("***********************************************************************************************************************");
+		else {
+			System.out.println(o.toString());
+			Iterator<Booking> iter3 = o.getBookingList().iterator();
+			while(iter3.hasNext()) {
+				Booking boo = iter3.next();
+				System.out.println(boo.toString());
+			}
+		}
 		
+		System.out.println("***********************************************************************************************************************");
+				
 		Person p3 = new Person();
 		p3.setEmailAddress("dupond@gmail.com");
 		p3 = p3.getOne();
@@ -35,7 +43,20 @@ public class Program {
 		s.setPassword("1292710371");
 		s = s.getOne();
 		if(s==null) System.out.println("Mot de passe incorrect");
-		else System.out.println(s.toString());
+		else {
+			System.out.println(s.toString());
+			Iterator<Order> iter4 = s.getOrderList().iterator();
+			while(iter4.hasNext()) {
+				Order or = iter4.next();
+				System.out.println(or.toString());
+				Iterator<Ticket> iter5 = or.getTicketList().iterator();
+				while(iter5.hasNext()) {
+					Ticket t = iter5.next();
+					System.out.println(t.toString());
+					
+				}
+			}
+		}
 
 		System.out.println("***********************************************************************************************************************");
 		
@@ -55,6 +76,48 @@ public class Program {
 			Artist ar = iter.next();
 			System.out.println(ar.toString());
 		}
+
+		System.out.println("***********************************************************************************************************************");
+		/*	
+		Planning pla = new Planning();
+		pla.setBeginDate(new Date());
+		pla.setEndDate(new Date());
+		//if(pla.create()) {
+			pla = pla.getOneNoID();
+			if(pla==null) System.out.println("Planning incorrect");
+			else System.out.println(pla.toString());
+			pla = pla.getOne();
+			if(pla==null) System.out.println("Planning incorrect");
+			else System.out.println(pla.toString());
+		//}
+*/		
+		System.out.println("***********************************************************************************************************************");
+		
+		Planning pla2 = new Planning();
+		Iterator<Planning> iter2 = pla2.getAll().iterator();
+		while(iter2.hasNext()) {
+			Planning pl = iter2.next();
+			System.out.println(pl.toString());
+			Iterator<Show> iter5 = pl.getShowList().iterator();
+			while(iter5.hasNext()) {
+				Show sh = iter5.next();
+				System.out.println(sh.toString());
+				Iterator<Artist> iter6 = sh.getArtistList().iterator();
+				while(iter5.hasNext()) {
+					Artist ar = iter6.next();
+					System.out.println(ar.toString());
+				}
+				Iterator<Representation> iter7 = sh.getRepresentationList().iterator();
+				while(iter7.hasNext()) {
+					Representation re = iter7.next();
+					System.out.println(re.toString());
+				}
+			}
+		}
+		
+		System.out.println("***********************************************************************************************************************");
+		
+
 	}
 
 }

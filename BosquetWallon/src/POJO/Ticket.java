@@ -2,11 +2,16 @@ package POJO;
 
 import java.io.Serializable;
 
+import DAO.Dao;
+import DAO.TicketDAO;
+
 @SuppressWarnings("serial")
 public class Ticket implements Serializable {
 	private int id;
-	private String firstname;
+	private String numPlace;
 	private double price;
+	private Representation representation;
+	private Dao<Ticket> dao = new TicketDAO();
 	
 	public Ticket() {
 		super();
@@ -18,11 +23,11 @@ public class Ticket implements Serializable {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public String getFirstname() {
-		return firstname;
+	public String getNumPlace() {
+		return numPlace;
 	}
-	public void setFirstname(String firstname) {
-		this.firstname = firstname;
+	public void setNumPlace(String numPlace) {
+		this.numPlace = numPlace;
 	}
 	public double getPrice() {
 		return price;
@@ -31,8 +36,23 @@ public class Ticket implements Serializable {
 		this.price = price;
 	}
 
+	public Representation getRepresentation() {
+		return representation;
+	}
+
+	public void setRepresentation(Representation representation) {
+		this.representation = representation;
+	}
+
 	@Override
 	public String toString() {
-		return "Ticket [id=" + id + ", firstname=" + firstname + ", price=" + price + "]";
+		return "Ticket [id=" + id + ", numPlace=" + numPlace + ", price=" + price + "]";
+	}
+	
+	public boolean create() {
+		return dao.create(this);
+	}
+	public Ticket getOne() {
+		return dao.get(this);
 	}
 }

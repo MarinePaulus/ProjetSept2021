@@ -1,6 +1,10 @@
 package POJO;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+
+import DAO.Dao;
+import DAO.CategoryDAO;
 
 @SuppressWarnings("serial")
 public class Category implements Serializable {
@@ -9,6 +13,8 @@ public class Category implements Serializable {
 	private double price;
 	private int availableTickets;
 	private int maximumTickets;
+	private Configuration config;
+	private Dao<Category> dao = new CategoryDAO();
 	
 	public Category() {
 		super();
@@ -45,9 +51,27 @@ public class Category implements Serializable {
 		this.maximumTickets = maximumTickets;
 	}
 
+	public Configuration getConfig() {
+		return config;
+	}
+
+	public void setConfig(Configuration config) {
+		this.config = config;
+	}
+
 	@Override
 	public String toString() {
 		return "Category [id=" + id + ", type=" + type + ", price=" + price + ", availableTickets=" + availableTickets
 				+ ", maximumTickets=" + maximumTickets + "]";
+	}
+	
+	public boolean create() {
+		return dao.create(this);
+	}
+	public Category getOne() {
+		return dao.get(this);
+	}
+	public ArrayList<Category> getAll() {
+		return dao.getList();
 	}
 }

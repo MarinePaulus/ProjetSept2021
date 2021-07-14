@@ -1,5 +1,7 @@
 package POJO;
 
+import java.util.ArrayList;
+
 import DAO.Dao;
 import DAO.SpectatorDAO;
 
@@ -9,6 +11,7 @@ public class Spectator extends Person {
 	private String phoneNumber;
 	private String Birthdate;
 	private Dao<Spectator> dao = new SpectatorDAO();
+	private ArrayList<Order> orderList = new ArrayList<Order>();
 	
 	public Spectator() {
 		super();
@@ -39,11 +42,26 @@ public class Spectator extends Person {
 	public void setBirthdate(String birthdate) {
 		Birthdate = birthdate;
 	}
-	
+	public ArrayList<Order> getOrderList() {
+		return orderList;
+	}
+	public void setOrderList(ArrayList<Order> orderList) {
+		this.orderList = orderList;
+	}
+	public void addOrder(Order order){
+		this.orderList.add(order);
+	}
+	public void removeOrder(Order order){
+		this.orderList.remove(order);
+	}
+
 	public String toString() {
 		return super.toString() + " gender=" + gender + ", phoneNumber=" + phoneNumber + ", Birthdate=" + Birthdate;
 	}
 
+	public boolean create() {
+		return dao.create(this);
+	}
 	public Spectator getOne() {
 		return dao.get(this);
 	}

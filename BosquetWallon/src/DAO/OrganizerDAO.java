@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
+import POJO.Booking;
 import POJO.Organizer;
 
 public class OrganizerDAO extends Dao<Organizer>{
@@ -61,6 +62,17 @@ public class OrganizerDAO extends Dao<Organizer>{
     			p.setPassword(res.getString("mdp"));
     			p.setRole(res.getString("role"));
     			p.setPhoneNumber(res.getString("telephone"));
+	    	}
+	    	if(p!= null) {
+	    		// Récup Bookings
+    			stmt = connection().prepareStatement("SELECT idRes FROM OrgReserv WHERE idPer=?");
+    			stmt.setInt(1, obj.getId());
+    			res = stmt.executeQuery();
+    			while(res.next()) {
+    				Booking b = new Booking();
+    				b.setId(res.getInt("idRes"));
+    				p.addBooking(b.getOne());	
+    	    	}
 	    	}
 	    } catch (SQLException ex){JOptionPane.showMessageDialog(null,"Error Access get one Organizer : " + ex.getMessage()); return null; }
 		return p;

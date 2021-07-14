@@ -1,6 +1,10 @@
 package POJO;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+
+import DAO.Dao;
+import DAO.BookingDAO;
 
 @SuppressWarnings("serial")
 public class Booking implements Serializable {
@@ -9,7 +13,9 @@ public class Booking implements Serializable {
 	private double balance;
 	private String status;
 	private double price;
-	
+	private Planning planning;
+	private Dao<Booking> dao = new BookingDAO();
+
 	public Booking() { 
 		super();
 	}
@@ -45,9 +51,30 @@ public class Booking implements Serializable {
 		this.price = price;
 	}
 
+	public Planning getPlanning() {
+		return planning;
+	}
+
+	public void setPlanning(Planning planning) {
+		this.planning = planning;
+	}
+
 	@Override
 	public String toString() {
 		return "Booking [id=" + id + ", deposit=" + deposit + ", balance=" + balance + ", status=" + status + ", price="
 				+ price + "]";
+	}
+	
+	public boolean create() {
+		return dao.create(this);
+	}
+	public boolean update() {
+		return dao.update(this);
+	}
+	public ArrayList<Booking> getAll() {
+		return dao.getList();
+	}
+	public Booking getOne() {
+		return dao.get(this);
 	}
 }

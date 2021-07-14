@@ -1,6 +1,10 @@
 package POJO;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+
+import DAO.Dao;
+import DAO.ShowDAO;
 
 @SuppressWarnings("serial")
 public class Show implements Serializable {
@@ -8,6 +12,10 @@ public class Show implements Serializable {
 	private String title;
 	private String description;
 	private String ticketPerPerson;
+	private Configuration config;
+	private ArrayList<Artist> artistList = new ArrayList<Artist>();
+	private ArrayList<Representation> representationList = new ArrayList<Representation>();
+	private Dao<Show> dao = new ShowDAO();
 	
 	public Show() {
 		super();
@@ -37,10 +45,53 @@ public class Show implements Serializable {
 	public void setTicketPerPerson(String ticketPerPerson) {
 		this.ticketPerPerson = ticketPerPerson;
 	}
+	public Configuration getConfig() {
+		return config;
+	}
+	public void setConfig(Configuration config) {
+		this.config = config;
+	}
+	public ArrayList<Artist> getArtistList() {
+		return artistList;
+	}
+	public void setArtistList(ArrayList<Artist> artistList) {
+		this.artistList = artistList;
+	}
+	public ArrayList<Representation> getRepresentationList() {
+		return representationList;
+	}
+	public void setRepresentationList(ArrayList<Representation> representationList) {
+		this.representationList = representationList;
+	}
+	public void addArtist(Artist artist){
+		this.artistList.add(artist);
+	}
+	public void removeArtist(Artist artist){
+		this.artistList.remove(artist);
+	}
+	public void addRepresentation(Representation representation){
+		this.representationList.add(representation);
+	}
+	public void removeRepresentation(Representation representation){
+		this.representationList.remove(representation);
+	}
 
 	@Override
 	public String toString() {
 		return "Show [id=" + id + ", title=" + title + ", description=" + description + ", ticketPerPerson="
-				+ ticketPerPerson + "]";
+				+ ticketPerPerson + " " + config.toString() + "]";
+	}
+	
+	public boolean create() {
+		return dao.create(this);
+	}
+	public boolean delete() {
+		return dao.delete(this);
+	}
+	public Show getOne() {
+		return dao.get(this);
+	}
+	public ArrayList<Show> getAll() {
+		return dao.getList();
 	}
 }

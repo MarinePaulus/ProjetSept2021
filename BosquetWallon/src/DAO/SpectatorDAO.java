@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
+import POJO.Order;
 import POJO.Spectator;
 
 public class SpectatorDAO extends Dao<Spectator>{
@@ -66,6 +67,17 @@ public class SpectatorDAO extends Dao<Spectator>{
     			p.setGender(res.getString("genre"));
     			p.setPhoneNumber(res.getString("telephone"));
     			p.setBirthdate(res.getString("naissance"));
+	    	}
+	    	if(p!= null) {
+	    		// Récup Orders
+    			stmt = connection().prepareStatement("SELECT idCmd FROM SpecCmd WHERE idPer=?");
+    			stmt.setInt(1, obj.getId());
+    			res = stmt.executeQuery();
+    			while(res.next()) {
+    				Order o = new Order();
+    				o.setId(res.getInt("idCmd"));
+    				p.addOrder(o.getOne());	
+    	    	}
 	    	}
 	    } catch (SQLException ex){JOptionPane.showMessageDialog(null,"Error Access get one Spectator : " + ex.getMessage()); return null; }
 		return p;

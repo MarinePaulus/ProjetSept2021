@@ -1,5 +1,7 @@
 package POJO;
 
+import java.util.ArrayList;
+
 import DAO.Dao;
 import DAO.OrganizerDAO;
 
@@ -7,6 +9,7 @@ import DAO.OrganizerDAO;
 public class Organizer extends Person {
 	private String phoneNumber;
 	private Dao<Organizer> dao = new OrganizerDAO();
+	private ArrayList<Booking> bookingList = new ArrayList<Booking>();
 	
 	public Organizer() {
 		super();
@@ -25,10 +28,27 @@ public class Organizer extends Person {
 		this.phoneNumber = phoneNumber;
 	}
 	
+	public ArrayList<Booking> getBookingList() {
+		return bookingList;
+	}
+
+	public void setBookingList(ArrayList<Booking> bookingList) {
+		this.bookingList = bookingList;
+	}
+	public void addBooking(Booking booking){
+		this.bookingList.add(booking);
+	}
+	public void removeBooking(Booking booking){
+		this.bookingList.remove(booking);
+	}
+
 	public String toString() {
 		return super.toString() + " phoneNumber=" + phoneNumber;
 	}
 
+	public boolean create() {
+		return dao.create(this);
+	}
 	public Organizer getOne() {
 		return dao.get(this);
 	}
