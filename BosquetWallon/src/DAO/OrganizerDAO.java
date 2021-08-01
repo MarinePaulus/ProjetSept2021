@@ -65,7 +65,7 @@ public class OrganizerDAO extends Dao<Organizer>{
 	    	}
 	    	if(p!= null) {
 	    		// Récup Bookings
-    			stmt = connection().prepareStatement("SELECT idRes FROM OrgReserv WHERE idPer=?");
+    			stmt = connection().prepareStatement("SELECT idRes FROM Reservation WHERE idPer=?");
     			stmt.setInt(1, obj.getId());
     			res = stmt.executeQuery();
     			while(res.next()) {
@@ -81,5 +81,19 @@ public class OrganizerDAO extends Dao<Organizer>{
 	@Override
 	public ArrayList<Organizer> getList() {
 		return null;
+	}
+	
+	public boolean recBookings(Organizer obj) {
+		PreparedStatement stmt = null;
+		try {
+			for(Booking book :obj.getBookingList()) {
+				stmt=connection().prepareStatement("update Reservation set idPer=? where idRes=?");
+				stmt.setInt(1, obj.getId());
+				stmt.setInt(2, book.getId());
+	            //Executing Query
+				stmt.executeUpdate();
+			}
+			return true;
+	    } catch (SQLException ex){JOptionPane.showMessageDialog(null,"Error Access update Booking : " + ex.getMessage()); return false; }
 	}
 }

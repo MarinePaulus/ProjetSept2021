@@ -2,6 +2,7 @@ package POJO;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import DAO.Dao;
 import DAO.BookingDAO;
@@ -9,7 +10,7 @@ import DAO.BookingDAO;
 @SuppressWarnings("serial")
 public class Booking implements Serializable {
 	private int id;
-	private double deposit;
+	private double deposit = 4000;
 	private double balance;
 	private String status;
 	private double price;
@@ -66,7 +67,10 @@ public class Booking implements Serializable {
 	}
 	
 	public boolean create() {
-		return dao.create(this);
+		if(planning.create()) {
+			planning = planning.getOneNoID();
+			return dao.create(this);
+		} else return false;
 	}
 	public boolean update() {
 		return dao.update(this);
@@ -76,5 +80,32 @@ public class Booking implements Serializable {
 	}
 	public Booking getOne() {
 		return dao.get(this);
+	}
+	public Booking getOneNoID() {
+		return ((BookingDAO) dao).getNoID(this);
+	}
+	
+	public void calculPrice() {
+		price = 0;
+        Calendar d = Calendar.getInstance();
+        d.setTime(planning.getBeginDate().getTime());
+		while(d.compareTo(planning.getEndDate())<0) {
+			switch(d.get(Calendar.DAY_OF_WEEK)) {
+				case Calendar.FRIDAY :
+					price += 4500;
+					break;
+				case Calendar.SATURDAY :
+					price += 4500;
+					break;
+				default :
+					price += 3000;
+			}
+			d.add(Calendar.DATE, 1);
+//			System.out.println(price);
+	     }
+	}
+	
+	public void calculBalance() {
+		balance=deposit+price;
 	}
 }

@@ -41,6 +41,9 @@ public class Organizer extends Person {
 	public void removeBooking(Booking booking){
 		this.bookingList.remove(booking);
 	}
+	public boolean recBookings() {
+		return ((OrganizerDAO) dao).recBookings(this);
+	}
 
 	public String toString() {
 		return super.toString() + " phoneNumber=" + phoneNumber;

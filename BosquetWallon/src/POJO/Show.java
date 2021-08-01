@@ -2,6 +2,8 @@ package POJO;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import DAO.Dao;
 import DAO.ShowDAO;
@@ -60,9 +62,15 @@ public class Show implements Serializable {
 	public ArrayList<Representation> getRepresentationList() {
 		return representationList;
 	}
-	public void setRepresentationList(ArrayList<Representation> representationList) {
-		this.representationList = representationList;
-	}
+	public void setRepresentationList() {
+		representationList = new ArrayList<Representation>();
+		Representation c = new Representation();
+	
+		representationList = c.getAll();	
+		Stream<Representation> strc = representationList.stream();
+		representationList = (ArrayList<Representation>) strc.filter(l->l.getShow().getId()==this.getId())
+				.collect(Collectors.toList());
+}
 	public void addArtist(Artist artist){
 		this.artistList.add(artist);
 	}
@@ -85,13 +93,33 @@ public class Show implements Serializable {
 	public boolean create() {
 		return dao.create(this);
 	}
+	public boolean update() {
+		return dao.update(this);
+	}
 	public boolean delete() {
 		return dao.delete(this);
 	}
 	public Show getOne() {
 		return dao.get(this);
 	}
+	public Show getOneNoID() {
+		return ((ShowDAO) dao).getNoID(this);
+	}
 	public ArrayList<Show> getAll() {
 		return dao.getList();
+	}
+	
+	public boolean recCatPrice() {
+		return ((ShowDAO) dao).recCatPrice(this);
+	}
+	public boolean delCatPrice() {
+		return ((ShowDAO) dao).delCatPrice(this);
+	}
+	public void getCatPrice() {
+		ArrayList<Category> cats = new ArrayList<Category>();
+		cats = ((ShowDAO) dao).getCatPrice(this);
+		for(int i = 0;i<cats.size();i++) {
+			config.getCategoryList().get(i).setPrice(cats.get(i).getPrice());
+		}
 	}
 }

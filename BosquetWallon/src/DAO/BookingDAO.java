@@ -102,4 +102,27 @@ public class BookingDAO extends Dao<Booking>{
 		return reser;
 	}
 
+	public Booking getNoID(Booking obj) {
+		ResultSet res = null;
+		Booking b = new Booking();
+		try {
+			PreparedStatement stmt = connection().prepareStatement("select * from Reservation where idPlan=?");
+			//Setting values for Each Parameter
+			stmt.setInt(1, obj.getPlanning().getId());
+			//Creaing Java ResultSet object
+			res = stmt.executeQuery();
+	    	if(res.next()) {
+	    		b.setId(res.getInt("idRes"));
+	    		b.setDeposit(res.getFloat("acompte"));
+				b.setBalance(res.getFloat("solde"));
+				b.setStatus(res.getString("statut"));
+				b.setPrice(res.getFloat("prix"));
+				Planning p = new Planning();
+				p.setId(res.getInt("idPlan"));
+				p = p.getOne();
+				b.setPlanning(p);
+	    	}
+	    } catch (SQLException ex){JOptionPane.showMessageDialog(null,"Error Access get one Planning : " + ex.getMessage()); return null; }
+		return b;
+	}
 }

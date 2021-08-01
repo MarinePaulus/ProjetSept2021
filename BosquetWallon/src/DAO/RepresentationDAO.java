@@ -10,6 +10,8 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
+import POJO.Artist;
+import POJO.Configuration;
 import POJO.Representation;
 import POJO.Show;
 
@@ -20,7 +22,7 @@ public class RepresentationDAO extends Dao<Representation>{
 		PreparedStatement stmt = null;
 		try {
 			//Crating PreparedStatement object
-			stmt = connection().prepareStatement("insert into Representation (titre, description, nbPlaceSpec, idConf) values (?,?,?,?)");
+			stmt = connection().prepareStatement("insert into Representation (dateR, heureD, heureF, idSpec) values (?,?,?,?)");
             //Setting values for Each Parameter
 			ZonedDateTime zdt = ZonedDateTime.ofInstant ( obj.getDate().getTime().toInstant() , ZoneId.of ( "Europe/Paris" ) );
 			LocalDate localDate = zdt.toLocalDate();
@@ -83,7 +85,7 @@ public class RepresentationDAO extends Dao<Representation>{
 		ArrayList<Representation> repr = new ArrayList<Representation>();
 		try {
 			//Using SQL SELECT Query
-            PreparedStatement stmt = connection().prepareStatement("select * from Show");
+            PreparedStatement stmt = connection().prepareStatement("select * from Representation");
             //Creaing Java ResultSet object
             res = stmt.executeQuery();
 	    	while(res.next()) {
@@ -98,7 +100,29 @@ public class RepresentationDAO extends Dao<Representation>{
 				r.setShow(s);
     			repr.add(r);
 	    	}
-	    } catch (SQLException ex){JOptionPane.showMessageDialog(null,"Error Access get all Artist : " + ex.getMessage()); return null; }
+	    } catch (SQLException ex){JOptionPane.showMessageDialog(null,"Error Access get all Representation : " + ex.getMessage()); return null; }
 		return repr;
+	}
+	
+	public Representation getNoID(Representation obj) {
+		ResultSet res = null;
+		Representation r = null;
+		try {
+			PreparedStatement stmt = connection().prepareStatement("SELECT * FROM Representation WHERE idRepr=(SELECT max(idRepr) FROM Representation);");
+			//Creaing Java ResultSet object
+			res = stmt.executeQuery();
+	    	if(res.next()) {
+	    		r = new Representation();
+	    		r.setId(res.getInt("idRepr"));
+	    		r.setDate(res.getDate("dateR"));
+    			r.setBeginHour(res.getString("heureD"));
+    			r.setEndHour(res.getString("heureF"));
+    			Show s = new Show();
+				s.setId(res.getInt("idSpec"));
+		//		s = s.getOne();
+				r.setShow(s);
+	    	}
+	    } catch (SQLException ex){JOptionPane.showMessageDialog(null,"Error Access get one Representation : " + ex.getMessage()); return null; }
+		return r;
 	}
 }

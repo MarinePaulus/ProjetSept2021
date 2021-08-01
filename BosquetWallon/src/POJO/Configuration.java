@@ -2,6 +2,8 @@ package POJO;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import DAO.ConfigurationDAO;
 import DAO.Dao;
@@ -39,19 +41,21 @@ public class Configuration implements Serializable {
 	public ArrayList<Category> getCategoryList() {
 		return categoryList;
 	}
-	public void setCategoryList(ArrayList<Category> categoryList) {
-		this.categoryList = categoryList;
-	}
-	public void addCategory(Category category){
-		this.categoryList.add(category);
-	}
-	public void removeCategory(Category category){
-		this.categoryList.remove(category);
+	public void setCategoryList() {
+		if(categoryList.isEmpty()) {
+			categoryList = new ArrayList<Category>();
+			Category c = new Category();
+		
+			categoryList = c.getAll();	
+			Stream<Category> strc = categoryList.stream();
+			categoryList = (ArrayList<Category>) strc.filter(l->l.getConfig().getId()==this.getId())
+				.collect(Collectors.toList());
+		}
 	}
 
 	@Override
 	public String toString() {
-		return "Configuration [id=" + id + ", type=" + type + ", description=" + description + "]";
+		return type + " : " + description;
 	}
 	
 	public Configuration getOne() {

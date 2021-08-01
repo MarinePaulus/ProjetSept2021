@@ -1,7 +1,6 @@
-import java.util.Date;
+
 import java.util.Iterator;
 
-import DAO.*;
 import POJO.*;
 
 public class Program {
@@ -78,7 +77,7 @@ public class Program {
 		}
 
 		System.out.println("***********************************************************************************************************************");
-		/*	
+/*	
 		Planning pla = new Planning();
 		pla.setBeginDate(new Date());
 		pla.setEndDate(new Date());
@@ -117,7 +116,38 @@ public class Program {
 		
 		System.out.println("***********************************************************************************************************************");
 		
-
+		Configuration conf = new Configuration();
+		conf.setId(2);
+		conf = conf.getOne();
+		conf.setCategoryList();
+		conf.toString();
+		Iterator<Category> iter8 = conf.getCategoryList().iterator();
+		while(iter8.hasNext()) {
+			Category cat = iter8.next();
+			System.out.println(cat.toString());
+		}
+		
+		
+//		Organizer o = new Organizer();
+//		o.setId(2);
+//		o.setPassword("1624974620");
+//		o = o.getOne();
+//		Planning p = new Planning();
+//		p.setId(23);
+//		p = p.getOne();
+//		System.out.println(p.toString());
+//		Booking b = new Booking();
+//		b.setPlanning(p);
+//		b.create();
+//		b = b.getOneNoID();
+//		System.out.println(b.toString());
+//		o.addBooking(b);
+//		o.recBookings();
+//		System.out.println(o.toString());
+//		Iterator<Booking> iter3 = o.getBookingList().iterator();
+//		while(iter3.hasNext()) {
+//			Booking boo = iter3.next();
+//			System.out.println(boo.toString());
+//		}
 	}
-
 }

@@ -62,7 +62,26 @@ public class TicketDAO extends Dao<Ticket>{
 
 	@Override
 	public ArrayList<Ticket> getList() {
-		return null;
+		ResultSet res = null;
+		ArrayList<Ticket> tic = new ArrayList<Ticket>();
+		try {
+			//Using SQL SELECT Query
+            PreparedStatement stmt = connection().prepareStatement("select * from Place");
+            //Creaing Java ResultSet object
+            res = stmt.executeQuery();
+	    	while(res.next()) {
+	    		Ticket t = new Ticket();
+	    		t.setId(res.getInt("idPlace"));
+	    		t.setNumPlace(res.getString("numPlace"));
+				t.setPrice(res.getFloat("prix"));
+				Representation re = new Representation();
+				re.setId(res.getInt("idRep"));
+				re = re.getOne();
+				t.setRepresentation(re);
+    			tic.add(t);
+	    	}
+	    } catch (SQLException ex){JOptionPane.showMessageDialog(null,"Error Access get all Artist : " + ex.getMessage()); return null; }
+		return tic;
 	}
 
 }

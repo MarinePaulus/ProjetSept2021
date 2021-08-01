@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 import POJO.Artist;
+import POJO.Category;
 import POJO.Configuration;
 import POJO.Representation;
 import POJO.Show;
@@ -45,7 +46,18 @@ public class ShowDAO extends Dao<Show>{
 	
 	@Override
 	public boolean update(Show obj) {
-	    return false;
+		PreparedStatement stmt = null;
+		try {
+			stmt=connection().prepareStatement("update Spectacle set titre=?, description=?, nbPlaceSpec=?, idConf=? where idSpec=?");
+			stmt.setString(1, obj.getTitle());
+			stmt.setString(2, obj.getDescription());
+			stmt.setString(3, obj.getTicketPerPerson());
+			stmt.setInt(4, obj.getConfig().getId());
+			stmt.setInt(5, obj.getId());
+            //Executing Query
+			stmt.executeUpdate();
+	    	return true;
+	    } catch (SQLException ex){JOptionPane.showMessageDialog(null,"Error Access update Show : " + ex.getMessage()); return false; }
 	}
 
 	@Override
@@ -123,6 +135,7 @@ public class ShowDAO extends Dao<Show>{
     				a.setId(res2.getInt("idPer"));
     				s.addArtist(a.getOne());	
     	    	}
+    			
     			// Récup Representation
 				stmt2 = connection().prepareStatement("SELECT idRepr FROM Representation WHERE idSpec=?");
     			stmt2.setInt(1, s.getId());
@@ -136,5 +149,92 @@ public class ShowDAO extends Dao<Show>{
 	    	}
 	    } catch (SQLException ex){JOptionPane.showMessageDialog(null,"Error Access get all Show : " + ex.getMessage()); return null; }
 		return show;
+	}
+	
+	public Show getNoID(Show obj) {
+		ResultSet res = null;
+		Show s = null;
+		try {
+			PreparedStatement stmt = connection().prepareStatement("SELECT * FROM Spectacle WHERE idSpec=(SELECT max(idSpec) FROM Spectacle);");
+			//Creaing Java ResultSet object
+			res = stmt.executeQuery();
+	    	if(res.next()) {
+	    		s = new Show();
+	    		s.setId(res.getInt("idSpec"));
+    			s.setTitle(res.getString("titre"));
+    			s.setDescription(res.getString("description"));
+    			s.setTicketPerPerson(res.getString("nbPlaceSpec"));
+    			Configuration c = new Configuration();
+				c.setId(res.getInt("idConf"));
+				c = c.getOne();
+				s.setConfig(c);
+	    	}
+	    	if(s!=null) {
+	    		// Récup Artists
+	    		stmt = connection().prepareStatement("SELECT idSpec FROM SpecArt WHERE idSpec=?");
+    			stmt.setInt(1, obj.getId());
+    			res = stmt.executeQuery();
+    			while(res.next()) {
+    				Artist a = new Artist();
+    				a.setId(res.getInt("idPer"));
+    				s.addArtist(a.getOne());	
+    	    	}
+    			// Récup Representation
+				stmt = connection().prepareStatement("SELECT idRepr FROM Representation WHERE idSpec=?");
+    			stmt.setInt(1, obj.getId());
+    			res = stmt.executeQuery();
+    			while(res.next()) {
+    				Representation r = new Representation();
+    				r.setId(res.getInt("idRepr"));
+    				s.addRepresentation(r.getOne());	
+    	    	}
+	    	}
+	    } catch (SQLException ex){JOptionPane.showMessageDialog(null,"Error Access get one Show : " + ex.getMessage()); return null; }
+		return s;
+	}
+	
+	public boolean recCatPrice(Show obj) {
+		PreparedStatement stmt = null;
+		try {
+			for(Category cat :obj.getConfig().getCategoryList()) {
+				stmt=connection().prepareStatement("insert into SpecCat (idSpec, idCat, prix) values (?,?,?)");
+				stmt.setInt(1, obj.getId());
+				stmt.setInt(2, cat.getId());
+				stmt.setFloat(3, (float) cat.getPrice());
+	            //Executing Query
+				stmt.executeUpdate();
+			}
+			return true;
+	    } catch (SQLException ex){JOptionPane.showMessageDialog(null,"Error Access create SpecCat : " + ex.getMessage()); return false; }
+	}
+	
+	public boolean delCatPrice(Show obj) {
+		PreparedStatement stmt = null;
+		try {
+			stmt=connection().prepareStatement("delete from SpecCat where idSpec=?");
+			stmt.setInt(1, obj.getId());
+			stmt.executeUpdate();
+	    	return true;
+	    } catch (SQLException ex){JOptionPane.showMessageDialog(null,"Error Access delete SpecCat : " + ex.getMessage()); return false; }
+	}
+	
+	public ArrayList<Category> getCatPrice(Show obj) {
+		ArrayList<Category> cats = new ArrayList<Category>();
+		ResultSet res = null;
+		try {
+			for(Category cat :obj.getConfig().getCategoryList()) {
+				PreparedStatement stmt=connection().prepareStatement("SELECT * FROM SpecCat WHERE idSpec=? and idCat=?");
+				//Setting values for Each Parameter
+				stmt.setInt(1, obj.getId());
+				stmt.setInt(2, cat.getId());
+				//Creaing Java ResultSet object
+				res = stmt.executeQuery();
+				if(res.next()) {
+					cat.setPrice(res.getFloat("prix"));
+					cats.add(cat);
+		    	}
+			}
+			return cats;
+	    } catch (SQLException ex){JOptionPane.showMessageDialog(null,"Error Access get SpecCat : " + ex.getMessage()); return null; }
 	}
 }

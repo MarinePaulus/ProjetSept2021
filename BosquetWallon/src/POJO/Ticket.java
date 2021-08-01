@@ -1,6 +1,9 @@
 package POJO;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import DAO.Dao;
 import DAO.TicketDAO;
@@ -54,5 +57,12 @@ public class Ticket implements Serializable {
 	}
 	public Ticket getOne() {
 		return dao.get(this);
+	}
+	public ArrayList<Ticket> getAll(){
+		ArrayList<Ticket> lstT = dao.getList();
+		Stream<Ticket> strc = lstT.stream();
+		lstT = (ArrayList<Ticket>) strc.filter(l->l.representation.getId()==this.representation.getId())
+				.collect(Collectors.toList());
+		return lstT;
 	}
 }

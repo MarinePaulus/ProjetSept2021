@@ -55,12 +55,12 @@ public class OrderDAO extends Dao<Order>{
 				
 				if(o!=null) {
 		    		// Récup Orders
-	    			stmt = connection().prepareStatement("SELECT idPl FROM CmdPlace WHERE idCmd=?");
+	    			stmt = connection().prepareStatement("SELECT idPlace FROM Place WHERE idCmd=?");
 	    			stmt.setInt(1, obj.getId());
 	    			res = stmt.executeQuery();
 	    			while(res.next()) {
 	    				Ticket t = new Ticket();
-	    				t.setId(res.getInt("idPl"));
+	    				t.setId(res.getInt("idPlace"));
 	    				o.addTicket(t.getOne());	
 	    	    	}
 		    	}
