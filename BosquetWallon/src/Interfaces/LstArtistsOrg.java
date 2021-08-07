@@ -4,8 +4,12 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.Iterator;
+import java.util.List;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -17,15 +21,15 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumnModel;
+import net.miginfocom.swing.MigLayout;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+import javax.swing.JComboBox;
 
 import POJO.Artist;
 import POJO.Organizer;
 import POJO.Planning;
 import POJO.Show;
-import net.miginfocom.swing.MigLayout;
-import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
 
 @SuppressWarnings("serial")
 public class LstArtistsOrg extends JFrame {
@@ -47,6 +51,9 @@ public class LstArtistsOrg extends JFrame {
 	private JLabel lblAdresseMail;
 	private JLabel lblNomScene;
 	private JTextField txtNomScene;
+	Artist art;
+	final DefaultComboBoxModel<Artist> model = new DefaultComboBoxModel<Artist>();
+	private JComboBox<Artist> comboBoxNomScene;
 
 	/**
 	 * Create the frame.
@@ -58,7 +65,7 @@ public class LstArtistsOrg extends JFrame {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		contentPane.setLayout(new MigLayout("", "[12.5%,fill][12.5%,fill][12.5%,grow,fill][12.5%,fill][12.5%,fill][12.5%,grow,fill][12.5%,fill][12.5%,fill]", "[][195.00][5%][][][][][]"));
+		contentPane.setLayout(new MigLayout("", "[12.5%,grow,fill][12.5%,fill][12.5%,grow,fill][12.5%,fill][12.5%,fill][12.5%,grow,fill][12.5%,fill][12.5%,fill]", "[][195.00][5%][][][][][]"));
 		
 		JLabel lblTitre = new JLabel("Liste des artistes participants au Spectacle");
 		lblTitre.setHorizontalAlignment(SwingConstants.CENTER);
@@ -70,13 +77,9 @@ public class LstArtistsOrg extends JFrame {
 		
 		
 		DefaultTableModel dtm = new DefaultTableModel(0, 0);
-		String header[] = new String[] { "Nom de scène", "Adresse" };
+		String header[] = new String[] { "Nom de scène", "E-Mail" };
 		dtm.setColumnIdentifiers(header);
 		table.setModel(dtm);
-		if(!spec.getArtistList().isEmpty()) {
-			TableColumnModel tcm = table.getColumnModel();       
-			tcm.getColumn(0).setMaxWidth(50);
-		}
 		
 		// Remplissage du tableau
 		Iterator<Artist> iter = spec.getArtistList().iterator();
@@ -90,10 +93,17 @@ public class LstArtistsOrg extends JFrame {
 	    cellSelectionModel.addListSelectionListener(new ListSelectionListener() {
 	      public void valueChanged(ListSelectionEvent e) {
 	    	  if(table.getSelectedRow() > -1){
-	    		  btnSupprimer.setEnabled(true);
-		    	  txtNom.setText((String) table.getValueAt(table.getSelectedRow(), 0));
-		    	  txtPrenom.setText((String) table.getValueAt(table.getSelectedRow(), 1));
-		    	  txtAdresse.setText((String) table.getValueAt(table.getSelectedRow(), 2));
+				btnSupprimer.setEnabled(true);
+				POJO.Person p = new POJO.Person();
+				p.setEmailAddress((String) table.getValueAt(table.getSelectedRow(), 1));
+				p = p.getOne();
+				Artist a = (Artist) p;
+				a = a.getOne();
+				txtNom.setText(a.getLastname());
+				txtPrenom.setText(a.getFirstname());
+				txtNomScene.setText(a.getShowname());
+				txtAdresseMail.setText(a.getEmailAddress());
+				txtAdresse.setText(a.getAdress());
 	    	  }
 	      }
 	    });
@@ -122,9 +132,49 @@ public class LstArtistsOrg extends JFrame {
 		lblNomScene = new JLabel("Nom de sc\u00E8ne");
 		contentPane.add(lblNomScene, "cell 1 4,alignx trailing");
 		
+		Artist a = new Artist();
+		List<Artist> lsta = a.getAll();
+		model.addElement(null);
+		model.addAll(lsta);
+		
+		comboBoxNomScene = new JComboBox<Artist>();
+		comboBoxNomScene.setMaximumRowCount(5);
+		comboBoxNomScene.setModel(model);
+		comboBoxNomScene.setSelectedIndex(0);
+		art = (Artist) comboBoxNomScene.getSelectedItem();
+		comboBoxNomScene.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				art = (Artist)comboBoxNomScene.getSelectedItem();
+				if(art != null) {
+					txtNom.setText(art.getLastname());
+					txtNom.setEditable(false);
+					txtPrenom.setText(art.getFirstname());
+					txtPrenom.setEditable(false);
+					txtNomScene.setText(art.getShowname());
+					txtNomScene.setEditable(false);
+					txtAdresseMail.setText(art.getEmailAddress());
+					txtAdresseMail.setEditable(false);
+					txtAdresse.setText(art.getAdress());
+					txtAdresse.setEditable(false);
+				} else {
+					txtNom.setText("");
+					txtNom.setEditable(true);
+					txtPrenom.setText("");
+					txtPrenom.setEditable(true);
+					txtNomScene.setText("");
+					txtNomScene.setEditable(true);
+					txtAdresseMail.setText("");
+					txtAdresseMail.setEditable(true);
+					txtAdresse.setText("");
+					txtAdresse.setEditable(true);
+				}
+			}
+		});
+		
 		txtNomScene = new JTextField();
 		txtNomScene.setColumns(10);
-		contentPane.add(txtNomScene, "cell 2 4 5 1,growx");
+		contentPane.add(txtNomScene, "cell 2 4 4 1,growx");
+		contentPane.add(comboBoxNomScene, "cell 6 4,growx");
 		
 		lblAdresse = new JLabel("Adresse");
 		contentPane.add(lblAdresse, "cell 1 5,alignx right,aligny center");
@@ -136,18 +186,31 @@ public class LstArtistsOrg extends JFrame {
 		btnAjouter = new JButton("Ajouter");
 		btnAjouter.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-//				Artist a = new Artist();
-//				a.setNom(txtNom.getText());
-//				a.setPrenom(txtPrenom.getText());
-//				a.setAdresse(txtAdresse.getText());
-//				// Ajout d'un truc des sélection d'Artiste (pour gérer si ajout à la main ou pas x) )
-//				if(a.create(spec.getIdSpec())) { 
-//					lblError.setText("Artiste ajouté avec succès");
-//					a = a.getOne();
-//					spec.getAllArtistes().add(a);
-//					dtm.addRow(new Object[] {a.getNom(), a.getPrenom(), a.getAdresse()});
-//				}
-//				else lblError.setText("Ajout impossible");
+				if(txtNomScene.getText()!=null&&txtAdresseMail.getText()!=null) {
+					Artist a = new Artist();
+					a.setLastname(txtNom.getText());
+					a.setFirstname(txtPrenom.getText());
+					a.setShowname(txtNomScene.getText());
+					a.setEmailAddress(txtAdresseMail.getText());
+					a.setAdress(txtAdresse.getText());
+					if(art == null) {
+						if(a.create()) { 
+							POJO.Person p = new POJO.Person();
+							p.setEmailAddress(a.getEmailAddress());
+							p = p.getOne();
+							a = (Artist) p;
+							a = a.getOne();
+						}  else lblError.setText("Erreur lors de l'ajout de l'artiste");
+					} else {
+						a.setId(art.getId());
+					}
+					if(spec.ArtistAvailable(a)) {
+						if(spec.addArtist(a)) {
+							dtm.addRow(new Object[] {a.getShowname(), a.getEmailAddress()});
+							lblError.setText("Artiste ajouté avec succès");
+						} else lblError.setText("Erreur lors de l'ajout de l'artiste");
+					} else lblError.setText("Artiste déjà dans la liste");
+				} else lblError.setText("Veuillez renseigner Email et nom de scène");
 			}
 		});
 		
@@ -163,19 +226,19 @@ public class LstArtistsOrg extends JFrame {
 		btnSupprimer.setEnabled(false);
 		btnSupprimer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-//		    	  if(table.getSelectedRow() > -1){
-//					Artist a = new Artist();
-//					a.setNom(txtNom.getText());
-//					a.setPrenom(txtPrenom.getText());
-//					a.setAdresse(txtAdresse.getText());
-//					a = a.getOne();
-//					if(a.delete(spec.getIdSpec())) {
-//						DefaultTableModel model = (DefaultTableModel) table.getModel();
-//						model.removeRow(table.getSelectedRow());
-//						spec.getAllArtistes().remove(a);
-//						lblError.setText("Artiste retiré avec succès");
-//					} else lblError.setText("Suppression impossible");
-//				} else lblError.setText("Veuillez sélectionner un élément à supprimer");
+		    	  if(table.getSelectedRow() > -1){
+		    		  Artist a = new Artist();
+		    		  POJO.Person p = new POJO.Person();
+						p.setEmailAddress(txtAdresseMail.getText());
+						p = p.getOne();
+						a = (Artist) p;
+						a = a.getOne();
+						if(spec.removeArtist(a)) {
+							DefaultTableModel model = (DefaultTableModel) table.getModel();
+							model.removeRow(table.getSelectedRow());
+							lblError.setText("Artiste retiré avec succès");
+						} else lblError.setText("Erreur lors de la suppression de l'artiste");
+				} else lblError.setText("Veuillez sélectionner un élément à supprimer");
 			}
 		});
 		contentPane.add(btnSupprimer, "cell 3 6 2 1");

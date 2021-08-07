@@ -10,8 +10,6 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
-import POJO.Artist;
-import POJO.Configuration;
 import POJO.Representation;
 import POJO.Show;
 

@@ -40,7 +40,7 @@ public class CategoryDAO extends Dao<Category> {
 	    	if(res.next()) {
 	    		c.setId(res.getInt("idCat"));
     			c.setType(res.getString("type"));
-    			c.setMaximumTickets(res.getInt("nbrPlaceMax"));
+    			c.setMaximumTickets(res.getInt("nbPlaceMax"));
     			Configuration co = new Configuration();
     			co.setId(res.getInt("idConf"));
     			co = co.getOne();
@@ -63,7 +63,7 @@ public class CategoryDAO extends Dao<Category> {
 	    		Category c = new Category();
 	    		c.setId(res.getInt("idCat"));
     			c.setType(res.getString("type"));
-    			c.setAvailableTickets(res.getInt("nbrPlaceMax"));
+    			c.setMaximumTickets(res.getInt("nbPlaceMax"));
     			Configuration co = new Configuration();
     			co.setId(res.getInt("idConf"));
     			co = co.getOne();

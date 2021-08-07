@@ -6,7 +6,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import DAO.Dao;
+import DAO.ShowArtDAO;
 import DAO.ShowDAO;
+import DAO.ShowCatDAO;
 
 @SuppressWarnings("serial")
 public class Show implements Serializable {
@@ -18,6 +20,8 @@ public class Show implements Serializable {
 	private ArrayList<Artist> artistList = new ArrayList<Artist>();
 	private ArrayList<Representation> representationList = new ArrayList<Representation>();
 	private Dao<Show> dao = new ShowDAO();
+	private ShowCatDAO daoc = new ShowCatDAO();
+	private ShowArtDAO daoa = new ShowArtDAO();
 	
 	public Show() {
 		super();
@@ -56,8 +60,8 @@ public class Show implements Serializable {
 	public ArrayList<Artist> getArtistList() {
 		return artistList;
 	}
-	public void setArtistList(ArrayList<Artist> artistList) {
-		this.artistList = artistList;
+	public void setArtistList() {
+		this.artistList = daoa.getList(this);
 	}
 	public ArrayList<Representation> getRepresentationList() {
 		return representationList;
@@ -66,22 +70,51 @@ public class Show implements Serializable {
 		representationList = new ArrayList<Representation>();
 		Representation c = new Representation();
 	
-		representationList = c.getAll();	
+		representationList = c.getAll();
 		Stream<Representation> strc = representationList.stream();
 		representationList = (ArrayList<Representation>) strc.filter(l->l.getShow().getId()==this.getId())
 				.collect(Collectors.toList());
 }
-	public void addArtist(Artist artist){
-		this.artistList.add(artist);
+	public boolean addArtist(Artist artist){
+		if(daoa.create(this, artist)){
+			this.artistList.add(artist);
+			return true;
+		} else return false;
+		
 	}
-	public void removeArtist(Artist artist){
-		this.artistList.remove(artist);
+	public boolean removeArtist(Artist artist){
+		if(daoa.delete(this, artist)) {
+			Artist a = null;
+			for(Artist x:artistList) {
+				if(x.getId()==artist.getId()) {
+					a=x;
+				}
+			}
+			this.artistList.remove(a);
+			return true;
+		} else return false;
 	}
-	public void addRepresentation(Representation representation){
-		this.representationList.add(representation);
+	public boolean addRepresentation(Representation representation){
+		if(representation.create()) {
+			representation = representation.getOneNoID();
+			representation.setShow(this);
+			if(representation.recCatPlace()) {
+				this.representationList.add(representation);
+				return true;
+			} else return false;
+		} else return false;
 	}
-	public void removeRepresentation(Representation representation){
-		this.representationList.remove(representation);
+	public boolean removeRepresentation(Representation representation){
+		if(representation.delete()) {
+			Representation r = null;
+			for(Representation x : representationList) {
+				if(x.getId()==representation.getId()) {
+					r=x;
+				}
+			}
+			this.representationList.remove(r);
+			return true;
+		} else return false;
 	}
 
 	@Override
@@ -110,16 +143,25 @@ public class Show implements Serializable {
 	}
 	
 	public boolean recCatPrice() {
-		return ((ShowDAO) dao).recCatPrice(this);
+		return daoc.create(this);
 	}
 	public boolean delCatPrice() {
-		return ((ShowDAO) dao).delCatPrice(this);
+		return daoc.delete(this);
 	}
 	public void getCatPrice() {
 		ArrayList<Category> cats = new ArrayList<Category>();
-		cats = ((ShowDAO) dao).getCatPrice(this);
+		cats = daoc.getList(this);
 		for(int i = 0;i<cats.size();i++) {
 			config.getCategoryList().get(i).setPrice(cats.get(i).getPrice());
 		}
+	}
+	
+	public boolean ArtistAvailable(Artist artist) {
+		for(Artist x:artistList) {
+			if(x.getEmailAddress().equalsIgnoreCase(artist.getEmailAddress())||x.getShowname().equalsIgnoreCase(artist.getShowname())) {
+				return false;
+			}
+		}
+		return true;
 	}
 }

@@ -53,7 +53,6 @@ public class CreaShowOrg extends JFrame {
 	final DefaultComboBoxModel<Configuration> model = new DefaultComboBoxModel<Configuration>();
 	private JComboBox<Configuration> comboBox;
 	private JLabel lblError;
-	Show spec;
 	Configuration conf;
 	private JLabel lblDescription;
 	private JTextField txtDescription;
@@ -209,7 +208,7 @@ public class CreaShowOrg extends JFrame {
 					} else flag = true;
 				}
 				if(flag) {
-					spec = new Show();
+					Show spec = new Show();
 					spec.setTitle(txtTitre.getText());
 					spec.setDescription(txtDescription.getText());
 					spec.setTicketPerPerson(spinNbPlace.getValue().toString());

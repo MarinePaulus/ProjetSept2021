@@ -44,6 +44,9 @@ public class Category implements Serializable {
 	public void setAvailableTickets(int availableTickets) {
 		this.availableTickets = availableTickets;
 	}
+	public void setAvailableTickets() {
+		this.availableTickets = maximumTickets;
+	}
 	public int getMaximumTickets() {
 		return maximumTickets;
 	}
@@ -72,6 +75,10 @@ public class Category implements Serializable {
 		return dao.get(this);
 	}
 	public ArrayList<Category> getAll() {
-		return dao.getList();
+		ArrayList<Category> cats = dao.getList();
+		for(Category c:cats) {
+			c.setAvailableTickets();
+		}
+		return cats;
 	}
 }

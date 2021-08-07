@@ -169,15 +169,9 @@ public class PlanningOrg extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(dateDebut.getDate()!=null && dateFin.getDate()!=null) {
 					reserv.setStatus("Disponible");
-					// Création de la réservation
-					if(reserv.create()) {
-						Booking b = reserv.getOneNoID();
-						orga.addBooking(b);
-						// Renseignement de l'organisateur
-						if(orga.recBookings()) {
+					if(orga.createBooking(reserv)) {
 							lblError.setText("Réservation enregistrée");
 							btnValider.setEnabled(false);
-						} else lblError.setText("Erreur lors de l'enregistrement de la réservation");
 					} else lblError.setText("Erreur lors de la création de la réservation");
 				} else lblError.setText("Veuillez sélectionner les dates de la réservation");
 			}

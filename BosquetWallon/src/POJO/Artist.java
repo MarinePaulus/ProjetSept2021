@@ -22,7 +22,7 @@ public class Artist extends Person {
 	}
 
 	public String toString() {
-		return super.toString() + " showname=" + showname;
+		return /*super.toString() + " showname=" + */showname;
 	}
 	
 	public boolean create() {

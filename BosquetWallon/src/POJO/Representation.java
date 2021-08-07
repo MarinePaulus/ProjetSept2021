@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import DAO.Dao;
+import DAO.ReprCatDAO;
 import DAO.RepresentationDAO;
 
 @SuppressWarnings("serial")
@@ -16,6 +17,7 @@ public class Representation implements Serializable {
 	private String endHour;
 	private Show show;
 	private Dao<Representation> dao = new RepresentationDAO();
+	private ReprCatDAO dao2 = new ReprCatDAO();
 	
 	public Representation() {
 		super();
@@ -76,6 +78,20 @@ public class Representation implements Serializable {
 		return dao.getList();
 	}
 	
+	public boolean recCatPlace() {
+		return dao2.create(this);
+	}
+	public boolean updateCatPlace() {
+		return dao2.update(this);
+	}
+	public void getCatPlace() {
+		ArrayList<Category> cats = new ArrayList<Category>();
+		cats = dao2.getList(this);
+		for(int i = 0;i<cats.size();i++) {
+			show.getConfig().getCategoryList().get(i).setAvailableTickets(cats.get(i).getAvailableTickets());
+		}
+	}
+	
 	public boolean verifyAvailable(Planning pla) {
 		boolean debOK = true; // Heure debut valide
 		boolean finOK = true; // Heure fin valide
@@ -90,10 +106,10 @@ public class Representation implements Serializable {
 		date.set(Calendar.SECOND, 0);
 		date.set(Calendar.MILLISECOND, 0);
 		
-	// Vérifier si les heures de représentations ne sot pas hors réservation
+	// Vérifier si les heures de représentations ne soNt pas hors réservation
 		boolean horsReserv = false;
 		if(date.compareTo(pla.getBeginDate())==0) {
-			if(hDebut>=12 && hFin>=12 && mFin>0) horsReserv = true;
+			if(hDebut>=12 && hFin>=12 && mFin>=0) horsReserv = true;
 		} else if(date.compareTo(pla.getEndDate())==0) {
 			if(hDebut<12 && hFin<=12 && mFin>0) horsReserv = true;
 		} else horsReserv=true;
@@ -103,10 +119,10 @@ public class Representation implements Serializable {
 			for(Representation rused :show.getRepresentationList()) {
 				// Si le représentations sont le même jour
 				if(date.compareTo(rused.getDate())==0) {
-					int rused_hDebut = Integer.parseInt(rused.getBeginHour().substring(0, beginHour.indexOf(":")));
-					int rused_mDebut = Integer.parseInt(rused.getBeginHour().substring(beginHour.indexOf(":")+1, beginHour.length()));
-					int rused_hFin = Integer.parseInt(rused.getEndHour().substring(0, endHour.indexOf(":")));
-					int rused_mFin = Integer.parseInt(rused.getEndHour().substring(endHour.indexOf(":")+1, endHour.length()));
+					int rused_hDebut = Integer.parseInt(rused.getBeginHour().substring(0, rused.getBeginHour().indexOf(":")));
+					int rused_mDebut = Integer.parseInt(rused.getBeginHour().substring(rused.getBeginHour().indexOf(":")+1, rused.getBeginHour().length()));
+					int rused_hFin = Integer.parseInt(rused.getEndHour().substring(0, rused.getEndHour().indexOf(":")));
+					int rused_mFin = Integer.parseInt(rused.getEndHour().substring(rused.getEndHour().indexOf(":")+1, rused.getEndHour().length()));
 					
 					boolean sensOK = false;
 					if(hDebut<=hFin) {

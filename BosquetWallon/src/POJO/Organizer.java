@@ -31,18 +31,22 @@ public class Organizer extends Person {
 	public ArrayList<Booking> getBookingList() {
 		return bookingList;
 	}
-
-	public void setBookingList(ArrayList<Booking> bookingList) {
-		this.bookingList = bookingList;
-	}
+	
 	public void addBooking(Booking booking){
 		this.bookingList.add(booking);
 	}
+
+	public boolean createBooking(Booking booking){
+		if(booking.create()) {
+			if(((OrganizerDAO) dao).addBooking(this, booking)){
+				this.bookingList.add(booking);
+				return true;
+			} else return false;
+		} else return false;
+	}
+	
 	public void removeBooking(Booking booking){
 		this.bookingList.remove(booking);
-	}
-	public boolean recBookings() {
-		return ((OrganizerDAO) dao).recBookings(this);
 	}
 
 	public String toString() {

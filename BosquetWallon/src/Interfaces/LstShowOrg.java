@@ -110,6 +110,8 @@ public class LstShowOrg extends JFrame {
 				Show s = new Show();
 				s.setId((int) table.getValueAt(index, 0));
 				s = s.getOne();
+				s.setArtistList();
+				s.setRepresentationList();
 				ModifShowOrg win = new ModifShowOrg(orga, pl, s);
 				win.setVisible(true);
 				dispose();

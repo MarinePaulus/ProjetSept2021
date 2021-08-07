@@ -99,9 +99,9 @@ public class PlanningDAO  extends Dao<Planning>{
     			stmt2.setInt(1, p.getId());
     			res2 = stmt2.executeQuery();
     			while(res2.next()) {
-    				Show r = new Show();
-    				r.setId(res2.getInt("idSpec"));
-    				p.addShow(r.getOne());	
+    				Show s = new Show();
+    				s.setId(res2.getInt("idSpec"));
+    				p.addShow(s.getOne());	
     	    	}	    		
 	    		plan.add(p);
 	    	}

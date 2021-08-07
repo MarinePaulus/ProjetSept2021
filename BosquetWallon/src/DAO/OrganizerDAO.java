@@ -71,7 +71,7 @@ public class OrganizerDAO extends Dao<Organizer>{
     			while(res.next()) {
     				Booking b = new Booking();
     				b.setId(res.getInt("idRes"));
-    				p.addBooking(b.getOne());	
+    				p.addBooking(b.getOne());
     	    	}
 	    	}
 	    } catch (SQLException ex){JOptionPane.showMessageDialog(null,"Error Access get one Organizer : " + ex.getMessage()); return null; }
@@ -83,16 +83,14 @@ public class OrganizerDAO extends Dao<Organizer>{
 		return null;
 	}
 	
-	public boolean recBookings(Organizer obj) {
+	public boolean addBooking(Organizer obj, Booking book) {
 		PreparedStatement stmt = null;
 		try {
-			for(Booking book :obj.getBookingList()) {
-				stmt=connection().prepareStatement("update Reservation set idPer=? where idRes=?");
-				stmt.setInt(1, obj.getId());
-				stmt.setInt(2, book.getId());
-	            //Executing Query
-				stmt.executeUpdate();
-			}
+			stmt=connection().prepareStatement("update Reservation set idPer=? where idRes=?");
+			stmt.setInt(1, obj.getId());
+			stmt.setInt(2, book.getId());
+            //Executing Query
+			stmt.executeUpdate();
 			return true;
 	    } catch (SQLException ex){JOptionPane.showMessageDialog(null,"Error Access update Booking : " + ex.getMessage()); return false; }
 	}

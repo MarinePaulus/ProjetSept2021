@@ -134,7 +134,7 @@ public class LstRepreOrg extends JFrame {
 		spinDebutH.setModel(new SpinnerNumberModel(0, 0, 23, 1));
 		contentPane.add(spinDebutH, "cell 2 4");
 		
-		label = new JLabel(":");
+		label = new JLabel("H");
 		contentPane.add(label, "cell 3 4,alignx trailing");
 		
 		spinDebutM = new JSpinner();
@@ -158,7 +158,7 @@ public class LstRepreOrg extends JFrame {
 		spinFinH.setModel(new SpinnerNumberModel(0, 0, 23, 1));
 		contentPane.add(spinFinH, "cell 6 4");
 		
-		label_1 = new JLabel(":");
+		label_1 = new JLabel("H");
 		contentPane.add(label_1, "cell 7 4,alignx trailing");
 		
 		spinFinM = new JSpinner();
@@ -181,14 +181,13 @@ public class LstRepreOrg extends JFrame {
 					r.setBeginHour(spinDebutH.getValue() + ":" + spinDebutM.getValue());
 					r.setEndHour(spinFinH.getValue() + ":" + spinFinM.getValue());
 					r.setShow(spec);
+					
 					if(r.verifyAvailable(pla)) {
-						if(r.create()) { 
-							r = r.getOneNoID();
-							spec.addRepresentation(r);
-							SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-							String str = formatter.format(r.getDate().getTime());
-							dtm.addRow(new Object[] {r.getId(), str, r.getBeginHour(), r.getEndHour()});
-							lblError.setText("Representation ajouté avec succès");
+						if(spec.addRepresentation(r)) {
+								SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+								String str = formatter.format(r.getDate().getTime());
+								dtm.addRow(new Object[] {r.getId(), str, r.getBeginHour(), r.getEndHour()});
+								lblError.setText("Representation ajouté avec succès");
 						} else lblError.setText("Erreur lors de l'ajout de la représentation");
 					} else lblError.setText("Horaire indisponible, veuillez choisir une autre tranche horaire");
 				} else lblError.setText("Veuillez renseigner tous les champs");
@@ -203,7 +202,7 @@ public class LstRepreOrg extends JFrame {
 		    	  if(table.getSelectedRow() > -1){
 					Representation r = new Representation();
 					r.setId((int) table.getValueAt(table.getSelectedRow(), 0));
-					if(r.delete()) {
+					if(spec.removeRepresentation(r)) {
 						DefaultTableModel model = (DefaultTableModel) table.getModel();
 						model.removeRow(table.getSelectedRow());
 						lblError.setText("Représentation retiré avec succès");
