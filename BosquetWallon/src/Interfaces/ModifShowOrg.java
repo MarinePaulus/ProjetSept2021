@@ -65,14 +65,14 @@ public class ModifShowOrg extends JFrame {
 	 */
 	public ModifShowOrg(Organizer orga, Planning pla, Show spec) {
 		spec.getConfig().setCategoryList();
-		spec.getCatPrice();
+		spec.setCatPrice();
 
 		setTitle("Bosquet Wallon - Spectacles");
 		setBounds(100, 100, 600, 400);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		contentPane.setLayout(new MigLayout("", "[25%,fill][25%,fill][12.5%,grow,fill][12.5%,fill][25%,fill][25%,fill]", "[][][][][][][50%][][][]"));
+		contentPane.setLayout(new MigLayout("", "[25%,fill][25%,fill][12.5%,grow,fill][12.5%,fill][25%,fill][25%,fill]", "[][][][][][][50%,grow][][][]"));
 		
 		lblSTitre = new JLabel("Modifier Spectacle");
 		lblSTitre.setHorizontalAlignment(SwingConstants.CENTER);
@@ -273,7 +273,7 @@ public class ModifShowOrg extends JFrame {
 	void AffichePanel(Configuration conf){
 		switch(conf.getType()) {
 			case "Debout" : 
-				lbl1.setText(conf.getCategoryList().get(0).getType() + " - " + conf.getCategoryList().get(0).getAvailableTickets() + " places");
+				lbl1.setText(conf.getCategoryList().get(0).getType() + " - " + conf.getCategoryList().get(0).getMaximumTickets() + " places");
 				txt1.setText(conf.getCategoryList().get(0).getPrice()+"");
 				lbl2.setVisible(false);
 				txt2.setVisible(false);
@@ -283,11 +283,11 @@ public class ModifShowOrg extends JFrame {
 				txt4.setVisible(false);
 				break;
 			case "Assis Concert" :
-				lbl1.setText(conf.getCategoryList().get(0).getType() + " - " + conf.getCategoryList().get(0).getAvailableTickets() + " places");
+				lbl1.setText(conf.getCategoryList().get(0).getType() + " - " + conf.getCategoryList().get(0).getMaximumTickets() + " places");
 				txt1.setText(conf.getCategoryList().get(0).getPrice()+"");
-				lbl2.setText(conf.getCategoryList().get(1).getType() + " - " + conf.getCategoryList().get(1).getAvailableTickets() + " places");
+				lbl2.setText(conf.getCategoryList().get(1).getType() + " - " + conf.getCategoryList().get(1).getMaximumTickets() + " places");
 				txt2.setText(conf.getCategoryList().get(1).getPrice()+"");
-				lbl3.setText(conf.getCategoryList().get(2).getType() + " - " + conf.getCategoryList().get(2).getAvailableTickets() + " places");
+				lbl3.setText(conf.getCategoryList().get(2).getType() + " - " + conf.getCategoryList().get(2).getMaximumTickets() + " places");
 				txt3.setText(conf.getCategoryList().get(2).getPrice()+"");
 				lbl2.setVisible(true);
 				txt2.setVisible(true);
@@ -297,13 +297,13 @@ public class ModifShowOrg extends JFrame {
 				txt4.setVisible(false);
 				break;
 			case "Assis Cirque" :
-				lbl1.setText(conf.getCategoryList().get(0).getType() + " - " + conf.getCategoryList().get(0).getAvailableTickets() + " places");
+				lbl1.setText(conf.getCategoryList().get(0).getType() + " - " + conf.getCategoryList().get(0).getMaximumTickets() + " places");
 				txt1.setText(conf.getCategoryList().get(0).getPrice()+"");
-				lbl2.setText(conf.getCategoryList().get(1).getType() + " - " + conf.getCategoryList().get(1).getAvailableTickets() + " places");
+				lbl2.setText(conf.getCategoryList().get(1).getType() + " - " + conf.getCategoryList().get(1).getMaximumTickets() + " places");
 				txt2.setText(conf.getCategoryList().get(1).getPrice()+"");
-				lbl3.setText(conf.getCategoryList().get(2).getType() + " - " + conf.getCategoryList().get(2).getAvailableTickets() + " places");
+				lbl3.setText(conf.getCategoryList().get(2).getType() + " - " + conf.getCategoryList().get(2).getMaximumTickets() + " places");
 				txt3.setText(conf.getCategoryList().get(2).getPrice()+"");
-				lbl4.setText(conf.getCategoryList().get(3).getType() + " - " + conf.getCategoryList().get(3).getAvailableTickets() + " places");
+				lbl4.setText(conf.getCategoryList().get(3).getType() + " - " + conf.getCategoryList().get(3).getMaximumTickets() + " places");
 				txt4.setText(conf.getCategoryList().get(3).getPrice()+"");
 				lbl2.setVisible(true);
 				txt2.setVisible(true);

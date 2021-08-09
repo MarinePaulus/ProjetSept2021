@@ -17,23 +17,23 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
-import POJO.Spectator;
+import POJO.Ticket;
 import POJO.Order;
+import POJO.Spectator;
 import net.miginfocom.swing.MigLayout;
 
 @SuppressWarnings("serial")
-public class LstOrderSpec extends JFrame {
+public class LstTicketSpec extends JFrame {
 
 	private JPanel contentPane;
 	private JTable table = new JTable();
 	private JButton btnRetour;
-	private JButton btnVoir;
 
 	/**
 	 * Create the frame.
 	 */
-	public LstOrderSpec(Spectator spec) {
-		setTitle("Bosquet Wallon - Commandes");
+	public LstTicketSpec(Spectator spec, Order order) {
+		setTitle("Bosquet Wallon - Tickets reçu");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 600, 400);
 		contentPane = new JPanel();
@@ -41,7 +41,7 @@ public class LstOrderSpec extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(new MigLayout("", "[25%,fill][25%,fill][25%,fill][25%,fill]", "[][][][]"));
 		
-		JLabel lblTitre = new JLabel("Liste des commandes faites");
+		JLabel lblTitre = new JLabel("Liste des tickets de la commandes");
 		lblTitre.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTitre.setFont(new Font("Tahoma", Font.BOLD, 16));
 		contentPane.add(lblTitre, "cell 0 0 4 1,growx,aligny top");
@@ -50,18 +50,18 @@ public class LstOrderSpec extends JFrame {
 		contentPane.add(scrollPane, "cell 0 1 4 1,grow");
 		
 		DefaultTableModel dtm = new DefaultTableModel(0, 0);
-		String header[] = new String[] {"", "Mode de Payement", "Mode de livraison", "total"};
+		String header[] = new String[] {"", "N° de place", "Prix", "Spectacle", "Représentation"};
 		dtm.setColumnIdentifiers(header);
 		table.setModel(dtm);
-		if(!spec.getOrderList().isEmpty()) {
+		if(!order.getTicketList().isEmpty()) {
 			TableColumnModel tcm = table.getColumnModel();       
 			tcm.getColumn(0).setMaxWidth(1);
 		}
 		// Remplissage du tableau
-		Iterator<Order> iter = spec.getOrderList().iterator();
+		Iterator<Ticket> iter = order.getTicketList().iterator();
 		while(iter.hasNext()) {
-			Order c = iter.next();
-			dtm.addRow(new Object[] {c.getId(), c.getPaymentMethod(), c.getDeliveryMethod(), c.getTotal()});
+			Ticket t = iter.next();
+			dtm.addRow(new Object[] {t.getId(), t.getNumPlace(), t.getPrice(), t.getRepresentation().getShow().getTitle(), t.getRepresentation().getBeginHour() + " à " +t.getRepresentation().getEndHour() });
 		}
 		ListSelectionModel cellSelectionModel = table.getSelectionModel();
 		cellSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -75,21 +75,6 @@ public class LstOrderSpec extends JFrame {
 				dispose();
 			}
 		});
-		contentPane.add(btnRetour, "cell 2 2");
-		
-		btnVoir = new JButton("Voir les tickets");
-		btnVoir.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				int index = table.getSelectedRow()!=-1?table.getSelectedRow():0;
-				Order c = new Order();
-				c.setId((int) table.getValueAt(index, 0));
-				c = c.getOne();
-				LstTicketSpec win = new LstTicketSpec(spec, c);
-				win.setVisible(true);
-				dispose();
-			}
-		});
-		contentPane.add(btnVoir, "cell 1 2");
-		
+		contentPane.add(btnRetour, "cell 1 2 2 1");
 	}
 }

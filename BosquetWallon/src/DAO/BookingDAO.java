@@ -69,8 +69,7 @@ public class BookingDAO extends Dao<Booking>{
 				b.setPrice(res.getFloat("prix"));
 				Planning p = new Planning();
 				p.setId(res.getInt("idPlan"));
-				p = p.getOne();
-				b.setPlanning(p);
+				b.setPlanning(p.getOne());
 	    	}
 	    } catch (SQLException ex){JOptionPane.showMessageDialog(null,"Error Access get one Booking : " + ex.getMessage()); return null; }
 		return b;
@@ -94,8 +93,7 @@ public class BookingDAO extends Dao<Booking>{
 				b.setPrice(res.getFloat("prix"));
 				Planning p = new Planning();
 				p.setId(res.getInt("idPlan"));
-				p = p.getOne();
-				b.setPlanning(p);
+				b.setPlanning(p.getOne());
 				reser.add(b);		
 	    	}
 	    } catch (SQLException ex){JOptionPane.showMessageDialog(null,"Error Access get all Bookings : " + ex.getMessage()); return null; }
@@ -119,10 +117,9 @@ public class BookingDAO extends Dao<Booking>{
 				b.setPrice(res.getFloat("prix"));
 				Planning p = new Planning();
 				p.setId(res.getInt("idPlan"));
-				p = p.getOne();
-				b.setPlanning(p);
+				b.setPlanning(p.getOne());
 	    	}
-	    } catch (SQLException ex){JOptionPane.showMessageDialog(null,"Error Access get one Planning : " + ex.getMessage()); return null; }
+	    } catch (SQLException ex){JOptionPane.showMessageDialog(null,"Error Access get one Booking : " + ex.getMessage()); return null; }
 		return b;
 	}
 }

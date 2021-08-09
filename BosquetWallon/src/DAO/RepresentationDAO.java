@@ -70,8 +70,7 @@ public class RepresentationDAO extends Dao<Representation>{
     			r.setEndHour(res.getString("heureF"));
     			Show s = new Show();
 				s.setId(res.getInt("idSpec"));
-		//		s = s.getOne();
-				r.setShow(s);
+				r.setShow(s.getOne());
 	    	}
 	    } catch (SQLException ex){JOptionPane.showMessageDialog(null,"Error Access get one Representation : " + ex.getMessage()); return null; }
 		return r;
@@ -94,8 +93,7 @@ public class RepresentationDAO extends Dao<Representation>{
     			r.setEndHour(res.getString("heureF"));
     			Show s = new Show();
 				s.setId(res.getInt("idSpec"));
-			//	s = s.getOne();
-				r.setShow(s);
+				r.setShow(s.getOne());
     			repr.add(r);
 	    	}
 	    } catch (SQLException ex){JOptionPane.showMessageDialog(null,"Error Access get all Representation : " + ex.getMessage()); return null; }
@@ -117,8 +115,7 @@ public class RepresentationDAO extends Dao<Representation>{
     			r.setEndHour(res.getString("heureF"));
     			Show s = new Show();
 				s.setId(res.getInt("idSpec"));
-		//		s = s.getOne();
-				r.setShow(s);
+				r.setShow(s.getOne());
 	    	}
 	    } catch (SQLException ex){JOptionPane.showMessageDialog(null,"Error Access get one Representation : " + ex.getMessage()); return null; }
 		return r;

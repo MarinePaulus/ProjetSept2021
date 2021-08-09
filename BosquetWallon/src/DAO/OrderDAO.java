@@ -73,5 +73,45 @@ public class OrderDAO extends Dao<Order>{
 	public ArrayList<Order> getList() {
 		return null;
 	}
+	
+	public Order getNoID(Order obj) {
+		ResultSet res = null;
+		Order o = new Order();
+		try {
+			PreparedStatement stmt = connection().prepareStatement("SELECT * FROM Commande WHERE idCmd=(SELECT max(idCmd) FROM Commande)");
+			//Creaing Java ResultSet object
+			res = stmt.executeQuery();
+	    	if(res.next()) {
+	    		o.setId(res.getInt("idCmd"));
+	    		o.setPaymentMethod(res.getString("modePay"));
+				o.setDeliveryMethod(res.getString("modeLivr"));
+				o.setTotal(res.getFloat("total"));
+				
+				if(o!=null) {
+		    		// Récup Orders
+	    			stmt = connection().prepareStatement("SELECT idPlace FROM Place WHERE idCmd=?");
+	    			stmt.setInt(1, obj.getId());
+	    			res = stmt.executeQuery();
+	    			while(res.next()) {
+	    				Ticket t = new Ticket();
+	    				t.setId(res.getInt("idPlace"));
+	    				o.addTicket(t.getOne());	
+	    	    	}
+		    	}
+	    	}
+	    } catch (SQLException ex){JOptionPane.showMessageDialog(null,"Error Access get one Order : " + ex.getMessage()); return null; }
+		return o;
+	}
 
+	public boolean addTicket(Order obj, Ticket ticket) {
+		PreparedStatement stmt = null;
+		try {
+			stmt=connection().prepareStatement("update Place set idCmd=? where idPlace=?");
+			stmt.setInt(1, obj.getId());
+			stmt.setInt(2, ticket.getId());
+            //Executing Query
+			stmt.executeUpdate();
+			return true;
+	    } catch (SQLException ex){JOptionPane.showMessageDialog(null,"Error Access update Ticket : " + ex.getMessage()); return false; }
+	}
 }

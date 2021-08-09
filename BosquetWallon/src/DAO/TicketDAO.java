@@ -17,9 +17,9 @@ public class TicketDAO extends Dao<Ticket>{
 		PreparedStatement stmt = null;
 		try {
 			//Crating PreparedStatement object
-			stmt = connection().prepareStatement("insert into Place (numPlace, prix, idRep) values (?,?,?)");
+			stmt = connection().prepareStatement("insert into Place (numPlace, prix, idRepr) values (?,?,?)");
             //Setting values for Each Parameter
-			stmt.setString(1, obj.getNumPlace());
+			stmt.setInt(1, obj.getNumPlace());
 			stmt.setDouble(2,obj.getPrice());
 			stmt.setInt(3, obj.getRepresentation().getId());
             //Executing Query
@@ -49,12 +49,11 @@ public class TicketDAO extends Dao<Ticket>{
 			res = stmt.executeQuery();
 	    	if(res.next()) {
 	    		t.setId(res.getInt("idPlace"));
-	    		t.setNumPlace(res.getString("numPlace"));
+	    		t.setNumPlace(res.getInt("numPlace"));
 				t.setPrice(res.getFloat("prix"));
 				Representation re = new Representation();
-				re.setId(res.getInt("idRep"));
-				re = re.getOne();
-				t.setRepresentation(re);
+				re.setId(res.getInt("idRepr"));
+				t.setRepresentation(re.getOne());
 	    	}
 	    } catch (SQLException ex){JOptionPane.showMessageDialog(null,"Error Access get one Ticket : " + ex.getMessage()); return null; }
 		return t;
@@ -72,16 +71,33 @@ public class TicketDAO extends Dao<Ticket>{
 	    	while(res.next()) {
 	    		Ticket t = new Ticket();
 	    		t.setId(res.getInt("idPlace"));
-	    		t.setNumPlace(res.getString("numPlace"));
+	    		t.setNumPlace(res.getInt("numPlace"));
 				t.setPrice(res.getFloat("prix"));
 				Representation re = new Representation();
-				re.setId(res.getInt("idRep"));
-				re = re.getOne();
-				t.setRepresentation(re);
+				re.setId(res.getInt("idRepr"));
+				t.setRepresentation(re.getOne());
     			tic.add(t);
 	    	}
 	    } catch (SQLException ex){JOptionPane.showMessageDialog(null,"Error Access get all Artist : " + ex.getMessage()); return null; }
 		return tic;
 	}
-
+	
+	public Ticket getNoID(Ticket obj) {
+		ResultSet res = null;
+		Ticket t = new Ticket();
+		try {
+			PreparedStatement stmt = connection().prepareStatement("SELECT * FROM Place WHERE idPlace=(SELECT max(idPlace) FROM Place)");
+			//Creaing Java ResultSet object
+			res = stmt.executeQuery();
+			if(res.next()) {
+	    		t.setId(res.getInt("idPlace"));
+	    		t.setNumPlace(res.getInt("numPlace"));
+				t.setPrice(res.getFloat("prix"));
+				Representation re = new Representation();
+				re.setId(res.getInt("idRepr"));
+				t.setRepresentation(re.getOne());
+	    	}
+	    } catch (SQLException ex){JOptionPane.showMessageDialog(null,"Error Access get one Place : " + ex.getMessage()); return null; }
+		return t;
+	}
 }

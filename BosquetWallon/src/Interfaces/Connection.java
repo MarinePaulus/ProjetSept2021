@@ -95,7 +95,7 @@ textFieldMdp.setText("1624974620");
 					if(c==null) {lblError.setText("Mot de passe incorrect");}
 					else {
 						lblError.setText("Bienvenue Spectateur");
-						AccueilSpect win = new AccueilSpect(c);
+						AccueilSpec win = new AccueilSpec(c);
 						win.setVisible(true);
 						dispose();
 					}

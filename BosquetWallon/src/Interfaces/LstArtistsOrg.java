@@ -193,7 +193,9 @@ public class LstArtistsOrg extends JFrame {
 					a.setShowname(txtNomScene.getText());
 					a.setEmailAddress(txtAdresseMail.getText());
 					a.setAdress(txtAdresse.getText());
-					if(art == null) {
+					if(art != null) {
+						a.setId(art.getId());
+					} else {
 						if(a.create()) { 
 							POJO.Person p = new POJO.Person();
 							p.setEmailAddress(a.getEmailAddress());
@@ -201,8 +203,6 @@ public class LstArtistsOrg extends JFrame {
 							a = (Artist) p;
 							a = a.getOne();
 						}  else lblError.setText("Erreur lors de l'ajout de l'artiste");
-					} else {
-						a.setId(art.getId());
 					}
 					if(spec.ArtistAvailable(a)) {
 						if(spec.addArtist(a)) {

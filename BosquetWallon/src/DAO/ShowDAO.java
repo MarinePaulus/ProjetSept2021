@@ -74,8 +74,7 @@ public class ShowDAO extends Dao<Show>{
     			s.setTicketPerPerson(res.getString("nbPlaceSpec"));
     			Configuration c = new Configuration();
 				c.setId(res.getInt("idConf"));
-				c = c.getOne();
-				s.setConfig(c);
+				s.setConfig(c.getOne());
 	    	}
 	    } catch (SQLException ex){JOptionPane.showMessageDialog(null,"Error Access get one Show : " + ex.getMessage()); return null; }
 		return s;
@@ -98,8 +97,7 @@ public class ShowDAO extends Dao<Show>{
     			s.setTicketPerPerson(res.getString("nbPlaceSpec"));
     			Configuration c = new Configuration();
 				c.setId(res.getInt("idConf"));
-				c = c.getOne();
-				s.setConfig(c);
+				s.setConfig(c.getOne());
     			show.add(s);
 	    	}
 	    } catch (SQLException ex){JOptionPane.showMessageDialog(null,"Error Access get all Show : " + ex.getMessage()); return null; }
@@ -121,8 +119,7 @@ public class ShowDAO extends Dao<Show>{
     			s.setTicketPerPerson(res.getString("nbPlaceSpec"));
     			Configuration c = new Configuration();
 				c.setId(res.getInt("idConf"));
-				c = c.getOne();
-				s.setConfig(c);
+				s.setConfig(c.getOne());
 	    	}
 	    } catch (SQLException ex){JOptionPane.showMessageDialog(null,"Error Access get one Show : " + ex.getMessage()); return null; }
 		return s;

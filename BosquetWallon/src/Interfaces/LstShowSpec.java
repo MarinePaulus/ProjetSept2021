@@ -108,7 +108,6 @@ public class LstShowSpec extends JFrame {
 				Show s = new Show();
 				s.setId((int) table.getValueAt(table.getSelectedRow(), 0));
 				s = s.getOne();
-				s.setConfig(s.getConfig().getOne());
 				CreaOrderSpec win = new CreaOrderSpec(Spectator, s);
 				win.setVisible(true);
 				dispose();
@@ -119,7 +118,7 @@ public class LstShowSpec extends JFrame {
 		btnRetour = new JButton("Retour");
 		btnRetour.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AccueilSpect win = new AccueilSpect(Spectator);
+				AccueilSpec win = new AccueilSpec(Spectator);
 				win.setVisible(true);
 				dispose();
 			}

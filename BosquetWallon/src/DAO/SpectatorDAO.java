@@ -70,7 +70,7 @@ public class SpectatorDAO extends Dao<Spectator>{
 	    	}
 	    	if(p!= null) {
 	    		// Récup Orders
-    			stmt = connection().prepareStatement("SELECT idCmd FROM SpecCmd WHERE idPer=?");
+    			stmt = connection().prepareStatement("SELECT idCmd FROM Commande WHERE idPer=?");
     			stmt.setInt(1, obj.getId());
     			res = stmt.executeQuery();
     			while(res.next()) {
@@ -86,5 +86,17 @@ public class SpectatorDAO extends Dao<Spectator>{
 	@Override
 	public ArrayList<Spectator> getList() {
 		return null;
+	}
+	
+	public boolean addOrder(Spectator obj, Order order) {
+		PreparedStatement stmt = null;
+		try {
+			stmt=connection().prepareStatement("update Commande set idPer=? where idCmd=?");
+			stmt.setInt(1, obj.getId());
+			stmt.setInt(2, order.getId());
+            //Executing Query
+			stmt.executeUpdate();
+			return true;
+	    } catch (SQLException ex){JOptionPane.showMessageDialog(null,"Error Access update Order : " + ex.getMessage()); return false; }
 	}
 }

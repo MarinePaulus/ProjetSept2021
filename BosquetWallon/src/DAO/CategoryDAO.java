@@ -43,8 +43,7 @@ public class CategoryDAO extends Dao<Category> {
     			c.setMaximumTickets(res.getInt("nbPlaceMax"));
     			Configuration co = new Configuration();
     			co.setId(res.getInt("idConf"));
-    			co = co.getOne();
-    			c.setConfig(co);
+    			c.setConfig(co.getOne());
 	    	}
 	    } catch (SQLException ex){JOptionPane.showMessageDialog(null,"Error Access get one Category : " + ex.getMessage()); return null; }
 		return c;
@@ -66,8 +65,7 @@ public class CategoryDAO extends Dao<Category> {
     			c.setMaximumTickets(res.getInt("nbPlaceMax"));
     			Configuration co = new Configuration();
     			co.setId(res.getInt("idConf"));
-    			co = co.getOne();
-    			c.setConfig(co);
+    			c.setConfig(co.getOne());
 	    		cat.add(c);
 	    	}
 	    } catch (SQLException ex){JOptionPane.showMessageDialog(null,"Error Access get all Categorys : " + ex.getMessage()); return null; }

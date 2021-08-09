@@ -51,8 +51,14 @@ public class Spectator extends Person {
 	public void addOrder(Order order){
 		this.orderList.add(order);
 	}
-	public void removeOrder(Order order){
-		this.orderList.remove(order);
+	public boolean createOrder(Order order){
+		if(order.create()) {
+			order = order.getOneNoID();
+			if(((SpectatorDAO) dao).addOrder(this, order)){
+				this.orderList.add(order);
+				return true;
+			} else return false;
+		} else return false;
 	}
 
 	public String toString() {

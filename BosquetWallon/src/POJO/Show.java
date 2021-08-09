@@ -74,6 +74,9 @@ public class Show implements Serializable {
 		Stream<Representation> strc = representationList.stream();
 		representationList = (ArrayList<Representation>) strc.filter(l->l.getShow().getId()==this.getId())
 				.collect(Collectors.toList());
+		for(Representation r :representationList) {
+			r.setShow(this);
+		}
 }
 	public boolean addArtist(Artist artist){
 		if(daoa.create(this, artist)){
@@ -148,7 +151,7 @@ public class Show implements Serializable {
 	public boolean delCatPrice() {
 		return daoc.delete(this);
 	}
-	public void getCatPrice() {
+	public void setCatPrice() {
 		ArrayList<Category> cats = new ArrayList<Category>();
 		cats = daoc.getList(this);
 		for(int i = 0;i<cats.size();i++) {

@@ -64,8 +64,8 @@ public class Category implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Category [id=" + id + ", type=" + type + ", price=" + price + ", availableTickets=" + availableTickets
-				+ ", maximumTickets=" + maximumTickets + "]";
+		return /*"Category [id=" + id + ", type=" + */type/* + ", price=" + price + ", availableTickets=" + availableTickets
+				+ ", maximumTickets=" + maximumTickets + "]"*/;
 	}
 	
 	public boolean create() {

@@ -70,7 +70,6 @@ public class PlanningDAO  extends Dao<Planning>{
     			while(res.next()) {
     				Show s = new Show();
     				s.setId(res.getInt("idSpec"));
-    				s = s.getOne();
     				p.addShow(s.getOne());	
     	    	}
 	    	}

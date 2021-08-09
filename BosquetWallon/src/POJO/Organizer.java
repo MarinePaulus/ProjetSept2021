@@ -38,6 +38,7 @@ public class Organizer extends Person {
 
 	public boolean createBooking(Booking booking){
 		if(booking.create()) {
+			booking = booking.getOneNoID();
 			if(((OrganizerDAO) dao).addBooking(this, booking)){
 				this.bookingList.add(booking);
 				return true;

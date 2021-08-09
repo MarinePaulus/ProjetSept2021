@@ -52,8 +52,30 @@ public class Order implements Serializable {
 	public void addTicket(Ticket ticket){
 		this.ticketList.add(ticket);
 	}
-	public void removeTicket(Ticket ticket){
-		this.ticketList.remove(ticket);
+	public boolean createTickets(){
+		boolean ret = false;
+		for(int i = 0;i<ticketList.size();i++) {
+			Ticket ticket = ticketList.get(i);
+			switch(i){
+				case 0:
+					ticket.setNumPlace();
+					break;
+				default :
+					int numPrec = ticketList.get(i-1).getNumPlace();
+					ticket.setNumPlace(numPrec+1);
+					break;
+			}
+			if(ticket.create()) {
+				ticket = ticket.getOneNoID();
+				if(((OrderDAO) dao).addTicket(this, ticket)){
+					ret =  true;
+				} else ret =  false;
+			} else ret =  false;
+		}
+		return ret;
+	}
+	public void removeTickets(double cat){
+		this.ticketList.removeIf(l->l.getPrice()==cat);
 	}
 
 	@Override
@@ -65,13 +87,21 @@ public class Order implements Serializable {
 	public boolean create() {
 		return dao.create(this);
 	}
-	public boolean update() {
-		return dao.update(this);
-	}
-	public ArrayList<Order> getAll() {
-		return dao.getList();
-	}
 	public Order getOne() {
 		return dao.get(this);
+	}
+	public Order getOneNoID() {
+		return ((OrderDAO) dao).getNoID(this);
+	}
+
+	public void calculTotal() {
+		int total = 5;
+		for(Ticket t : getTicketList()) {
+			total+= t.getPrice();
+		}
+		if(deliveryMethod.equals("Envoi sécurisé")) {
+			total+=10;
+		}
+		this.total=total;
 	}
 }

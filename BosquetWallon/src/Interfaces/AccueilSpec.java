@@ -17,14 +17,14 @@ import javax.swing.SwingConstants;
 import javax.swing.JButton;
 
 @SuppressWarnings("serial")
-public class AccueilSpect extends JFrame {
+public class AccueilSpec extends JFrame {
 
 	private JPanel contentPane;
 
 	/**
 	 * Create the frame.
 	 */
-	public AccueilSpect(Spectator spectator) {
+	public AccueilSpec(Spectator spectator) {
 		setTitle("Bosquet Wallon - Accueil");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 600, 400);
