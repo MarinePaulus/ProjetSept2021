@@ -2,14 +2,16 @@ package POJO;
 
 import java.util.ArrayList;
 
+import DAO.BookingDAO;
 import DAO.Dao;
 import DAO.OrganizerDAO;
 
 @SuppressWarnings("serial")
 public class Organizer extends Person {
 	private String phoneNumber;
-	private Dao<Organizer> dao = new OrganizerDAO();
 	private ArrayList<Booking> bookingList = new ArrayList<Booking>();
+	private Dao<Organizer> dao = new OrganizerDAO();
+	private Dao<Booking> daob = new BookingDAO();
 	
 	public Organizer() {
 		super();
@@ -20,6 +22,7 @@ public class Organizer extends Person {
 	}
 	public void setPassword(String password) {
 		this.password = password;
+		crypt();
 	}
 	public String getPhoneNumber() {
 		return phoneNumber;
@@ -39,7 +42,7 @@ public class Organizer extends Person {
 	public boolean createBooking(Booking booking){
 		if(booking.create()) {
 			booking = booking.getOneNoID();
-			if(((OrganizerDAO) dao).addBooking(this, booking)){
+			if(((BookingDAO) daob).updateBooking(booking, this)){
 				this.bookingList.add(booking);
 				return true;
 			} else return false;

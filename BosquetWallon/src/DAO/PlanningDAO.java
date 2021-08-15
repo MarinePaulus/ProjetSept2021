@@ -132,18 +132,4 @@ public class PlanningDAO  extends Dao<Planning>{
 	    } catch (SQLException ex){JOptionPane.showMessageDialog(null,"Error Access get one Planning : " + ex.getMessage()); return null; }
 		return p;
 	}
-
-	public boolean recShows(Planning obj) {
-		PreparedStatement stmt = null;
-		try {
-			for(Show show :obj.getShowList()) {
-				stmt=connection().prepareStatement("update Spectacle set idPlan=? where idSpec=?");
-				stmt.setInt(1, obj.getId());
-				stmt.setInt(2, show.getId());
-	            //Executing Query
-				stmt.executeUpdate();
-			}
-			return true;
-	    } catch (SQLException ex){JOptionPane.showMessageDialog(null,"Error Access update Show : " + ex.getMessage()); return false; }
-	}
 }

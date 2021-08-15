@@ -49,7 +49,7 @@ public class AccueilOrg extends JFrame {
 		JButton btnPlanning = new JButton("Voir les dates disponibles");
 		btnPlanning.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				PlanningOrg win = new PlanningOrg(orga);
+				LstPlanningOrg win = new LstPlanningOrg(orga);
 				win.setVisible(true);
 				dispose();
 			}

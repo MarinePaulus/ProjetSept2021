@@ -22,7 +22,7 @@ public class Spectator extends Person {
 	}
 	public void setPassword(String password) {
 		this.password = password;
-		//crypt();
+		crypt();
 	}
 	public String getPhoneNumber() {
 		return phoneNumber;

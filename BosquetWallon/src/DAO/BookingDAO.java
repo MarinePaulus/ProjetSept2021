@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 import POJO.Booking;
+import POJO.Organizer;
 import POJO.Planning;
 
 public class BookingDAO extends Dao<Booking>{
@@ -39,13 +40,9 @@ public class BookingDAO extends Dao<Booking>{
 	public boolean update(Booking obj) {
 		PreparedStatement stmt = null;
 		try {
-			stmt=connection().prepareStatement("update Reservation set acompte=?, solde=?, statut=?, prix=?, idPlan=? where idRes=?");
-			stmt.setDouble(1, obj.getDeposit());
-			stmt.setDouble(2,obj.getBalance());
-			stmt.setString(3, obj.getStatus());
-			stmt.setDouble(4, obj.getPrice());
-			stmt.setInt(5,  obj.getPlanning().getId());
-			stmt.setInt(6, obj.getId());
+			stmt=connection().prepareStatement("update Reservation set statut=? where idRes=?");
+			stmt.setString(1, obj.getStatus());
+			stmt.setInt(2, obj.getId());
             //Executing Query
 			stmt.executeUpdate();
 	    	return true;
@@ -121,5 +118,17 @@ public class BookingDAO extends Dao<Booking>{
 	    	}
 	    } catch (SQLException ex){JOptionPane.showMessageDialog(null,"Error Access get one Booking : " + ex.getMessage()); return null; }
 		return b;
+	}
+	
+	public boolean updateBooking(Booking obj, Organizer org) {
+		PreparedStatement stmt = null;
+		try {
+			stmt=connection().prepareStatement("update Reservation set idPer=? where idRes=?");
+			stmt.setInt(1, org.getId());
+			stmt.setInt(2, obj.getId());
+            //Executing Query
+			stmt.executeUpdate();
+			return true;
+	    } catch (SQLException ex){JOptionPane.showMessageDialog(null,"Error Access update Booking : " + ex.getMessage()); return false; }
 	}
 }

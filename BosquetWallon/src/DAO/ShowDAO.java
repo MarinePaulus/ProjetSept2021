@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 import POJO.Configuration;
+import POJO.Planning;
 import POJO.Show;
 
 public class ShowDAO extends Dao<Show>{
@@ -123,5 +124,19 @@ public class ShowDAO extends Dao<Show>{
 	    	}
 	    } catch (SQLException ex){JOptionPane.showMessageDialog(null,"Error Access get one Show : " + ex.getMessage()); return null; }
 		return s;
+	}
+	
+	public boolean updateShows(Planning obj) {
+		PreparedStatement stmt = null;
+		try {
+			for(Show show :obj.getShowList()) {
+				stmt=connection().prepareStatement("update Spectacle set idPlan=? where idSpec=?");
+				stmt.setInt(1, obj.getId());
+				stmt.setInt(2, show.getId());
+	            //Executing Query
+				stmt.executeUpdate();
+			}
+			return true;
+	    } catch (SQLException ex){JOptionPane.showMessageDialog(null,"Error Access update Show : " + ex.getMessage()); return false; }
 	}
 }

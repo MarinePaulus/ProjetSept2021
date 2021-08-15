@@ -353,12 +353,15 @@ public class CreaOrderSpec extends JFrame {
 				lbl1.setText(conf.getCategoryList().get(0).getType() + " - " + conf.getCategoryList().get(0).getAvailableTickets() + " places disponibles - " + conf.getCategoryList().get(0).getPrice()+"€");
 				txt2.setVisible(false);
 				lbl2.setVisible(false);
-				lblSsTot3.setVisible(false);
+				lblSs2.setVisible(false);
+				lblSsTot2.setVisible(false);
 				txt3.setVisible(false);
 				lbl3.setVisible(false);
-				lblSsTot2.setVisible(false);
+				lblSs3.setVisible(false);
+				lblSsTot3.setVisible(false);
 				txt4.setVisible(false);
 				lbl4.setVisible(false);
+				lblSs4.setVisible(false);
 				lblSsTot4.setVisible(false);
 				break;
 		case "Assis Concert" :
@@ -367,6 +370,7 @@ public class CreaOrderSpec extends JFrame {
 				lbl3.setText(conf.getCategoryList().get(2).getType() + " - " + conf.getCategoryList().get(2).getAvailableTickets() + " places disponibles - " + conf.getCategoryList().get(2).getPrice()+"€");
 				txt4.setVisible(false);
 				lbl4.setVisible(false);
+				lblSs4.setVisible(false);
 				lblSsTot4.setVisible(false);
 				break;
 			case "Assis Cirque" :

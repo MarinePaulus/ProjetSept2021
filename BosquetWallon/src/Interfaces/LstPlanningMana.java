@@ -1,96 +1,99 @@
 package Interfaces;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
-import POJO.Spectator;
-import POJO.Order;
+import POJO.Booking;
+import POJO.Manager;
+import POJO.Planning;
 import net.miginfocom.swing.MigLayout;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 
 @SuppressWarnings("serial")
-public class LstOrderSpec extends JFrame {
+public class LstPlanningMana extends JFrame {
 
 	private JPanel contentPane;
-	private JTable table = new JTable();
 	private JButton btnRetour;
-	private JButton btnVoir;
-
+	private JLabel lblError;
+	private JTable table = new JTable();
+	
 	/**
 	 * Create the frame.
 	 */
-	public LstOrderSpec(Spectator spec) {
-		setTitle("Bosquet Wallon - Commandes");
+	public LstPlanningMana(Manager mana) {
+		Booking reserv = new Booking();
+		reserv.setPlanning(new Planning());
+		setTitle("Bosquet Wallon - Planning");
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 600, 400);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		contentPane.setLayout(new MigLayout("", "[25%,fill][25%,fill][25%,fill][25%,fill]", "[][][][]"));
+		contentPane.setLayout(new MigLayout("", "[25%,grow][25%][25%][25%]", "[][65%,grow,fill][][][][][]"));
 		
-		JLabel lblTitre = new JLabel("Liste des commandes faites");
+		JLabel lblTitre = new JLabel("Liste des Planning utilisés");
 		lblTitre.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTitre.setFont(new Font("Tahoma", Font.BOLD, 16));
 		contentPane.add(lblTitre, "cell 0 0 4 1,growx,aligny top");
 		
-		btnVoir = new JButton("Voir les tickets");
-		btnVoir.setEnabled(false);
-		btnVoir.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				int index = table.getSelectedRow()!=-1?table.getSelectedRow():0;
-				Order c = new Order();
-				c.setId((int) table.getValueAt(index, 0));
-				c = c.getOne();
-				LstTicketSpec win = new LstTicketSpec(spec, c);
-				win.setVisible(true);
-				dispose();
-			}
-		});
-		contentPane.add(btnVoir, "cell 1 2");
-		
 		JScrollPane scrollPane = new JScrollPane();
 		contentPane.add(scrollPane, "cell 0 1 4 1,grow");
 		
+		Planning p = new Planning();
+		ArrayList<Planning> lstP = p.getAll();
+		
 		DefaultTableModel dtm = new DefaultTableModel(0, 0);
-		String header[] = new String[] {"", "Mode de Payement", "Mode de livraison", "total"};
+		String header[] = new String[] {"", "Date de début", "Date de fin"};
 		dtm.setColumnIdentifiers(header);
 		table.setModel(dtm);
-		if(!spec.getOrderList().isEmpty()) {
+		if(!lstP.isEmpty()) {
 			TableColumnModel tcm = table.getColumnModel();       
 			tcm.getColumn(0).setMaxWidth(1);
-			btnVoir.setEnabled(true);
 		}
 		// Remplissage du tableau
-		Iterator<Order> iter = spec.getOrderList().iterator();
+		Iterator<Planning> iter = lstP.iterator();
 		while(iter.hasNext()) {
-			Order c = iter.next();
-			dtm.addRow(new Object[] {c.getId(), c.getPaymentMethod(), c.getDeliveryMethod(), c.getTotal()});
+			Planning pla = iter.next();
+			SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+			String strd = formatter.format(pla.getBeginDate().getTime());
+			String strf = formatter.format(pla.getEndDate().getTime());
+			
+			dtm.addRow(new Object[] {pla.getId(), strd, strf});
 		}
 		ListSelectionModel cellSelectionModel = table.getSelectionModel();
 		cellSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		scrollPane.setViewportView(table);
 		
+		lblError = new JLabel("");
+		lblError.setHorizontalAlignment(SwingConstants.CENTER);
+		lblError.setForeground(Color.RED);
+		contentPane.add(lblError, "cell 0 6 4 1");
+		
 		btnRetour = new JButton("Retour");
 		btnRetour.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AccueilSpec win = new AccueilSpec(spec);
+				AccueilMana win = new AccueilMana(mana);
 				win.setVisible(true);
 				dispose();
 			}
 		});
-		contentPane.add(btnRetour, "cell 2 2");
+		contentPane.add(btnRetour, "cell 3 5,growx,aligny center");
 	}
 }

@@ -8,6 +8,7 @@ import java.util.Iterator;
 
 import DAO.Dao;
 import DAO.PlanningDAO;
+import DAO.ShowDAO;
 
 @SuppressWarnings("serial")
 public class Planning implements Serializable {
@@ -16,6 +17,7 @@ public class Planning implements Serializable {
 	private Calendar endDate;
 	private ArrayList<Show> showList = new ArrayList<Show>();
 	private Dao<Planning> dao = new PlanningDAO();
+	private Dao<Show> daos = new ShowDAO();
 
 	public Planning() {
 		super();
@@ -46,17 +48,14 @@ public class Planning implements Serializable {
 	public ArrayList<Show> getShowList() {
 		return showList;
 	}
-	public void setShowList(ArrayList<Show> showList) {
-		this.showList = showList;
-	}
 	public void addShow(Show show){
 		this.showList.add(show);
 	}
 	public void removeShow(Show show){
 		this.showList.remove(show);
 	}
-	public boolean recShows() {
-		return ((PlanningDAO) dao).recShows(this);
+	public boolean updateShows() {
+		return ((ShowDAO) daos).updateShows(this);
 	}
 
 	@Override

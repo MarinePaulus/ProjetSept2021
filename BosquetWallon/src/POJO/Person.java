@@ -64,7 +64,7 @@ public class Person implements Serializable {
 
 	protected void crypt() {
 		int crypt = password.concat("mdp").hashCode();
-		this.password = crypt+"";
+		password = crypt+"";
 	}
 	
 	public Person getOne() {

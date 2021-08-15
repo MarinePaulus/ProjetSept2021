@@ -78,7 +78,7 @@ public class Representation implements Serializable {
 		return dao.getList();
 	}
 	
-	public boolean recCatPlace() {
+	public boolean createCatPlace() {
 		return dao2.create(this);
 	}
 	public boolean updateCatPlace() {

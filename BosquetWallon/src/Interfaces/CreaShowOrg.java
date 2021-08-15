@@ -227,10 +227,10 @@ public class CreaShowOrg extends JFrame {
 						}
 						
 						// Création des champs dans SpecCat
-						if(s.recCatPrice()) {
+						if(s.createCatPrice()) {
 							pla.addShow(s);
 							// Renseignement du planning dans le Spectacle
-							if(pla.recShows()) {
+							if(pla.updateShows()) {
 								lblError.setText("Spectacle enregistré");
 								btnEnreg.setEnabled(false);
 							} else lblError.setText("Erreur lors de l'enregistrement du spectacle");

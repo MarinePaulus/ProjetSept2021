@@ -101,7 +101,7 @@ public class Show implements Serializable {
 		if(representation.create()) {
 			representation = representation.getOneNoID();
 			representation.setShow(this);
-			if(representation.recCatPlace()) {
+			if(representation.createCatPlace()) {
 				this.representationList.add(representation);
 				return true;
 			} else return false;
@@ -145,7 +145,7 @@ public class Show implements Serializable {
 		return dao.getList();
 	}
 	
-	public boolean recCatPrice() {
+	public boolean createCatPrice() {
 		return daoc.create(this);
 	}
 	public boolean delCatPrice() {

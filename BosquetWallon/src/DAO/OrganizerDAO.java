@@ -82,16 +82,4 @@ public class OrganizerDAO extends Dao<Organizer>{
 	public ArrayList<Organizer> getList() {
 		return null;
 	}
-	
-	public boolean addBooking(Organizer obj, Booking book) {
-		PreparedStatement stmt = null;
-		try {
-			stmt=connection().prepareStatement("update Reservation set idPer=? where idRes=?");
-			stmt.setInt(1, obj.getId());
-			stmt.setInt(2, book.getId());
-            //Executing Query
-			stmt.executeUpdate();
-			return true;
-	    } catch (SQLException ex){JOptionPane.showMessageDialog(null,"Error Access update Booking : " + ex.getMessage()); return false; }
-	}
 }

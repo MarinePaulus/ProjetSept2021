@@ -14,22 +14,6 @@ public class ManagerDAO extends Dao<Manager>{
 	@Override
 	public boolean create(Manager obj) {
 		return false;
-//		PreparedStatement stmt = null;
-//		try {
-//			//Crating PreparedStatement object
-//			stmt = connection().prepareStatement("insert into Personne (nom, prenom, adresse, mail, mdp, role, telephone) values (?,?,?,?,?,?,?)");
-//            //Setting values for Each Parameter
-//			stmt.setString(1, obj.getLastname());
-//			stmt.setString(2, obj.getFirstname());
-//			stmt.setString(3, obj.getAdress());
-//			stmt.setString(4, obj.getEmailAddress());
-//			stmt.setString(5, obj.getPassword());
-//			stmt.setString(6, "Gestionnaire");
-//			stmt.setString(7, obj.getPhoneNumber());
-//            //Executing Query
-//			stmt.executeUpdate();
-//	    	return true;
-//	    } catch (SQLException ex){JOptionPane.showMessageDialog(null,"Error Access create Manager : " + ex.getMessage()); return false; }
 	}
 	
 	@Override

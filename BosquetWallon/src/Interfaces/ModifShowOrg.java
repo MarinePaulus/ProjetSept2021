@@ -226,7 +226,7 @@ public class ModifShowOrg extends JFrame {
 						spec.getConfig().getCategoryList().get(3).setPrice(Float.parseFloat(txt4.getText()));
 					}
 					// Création des champs dans SpecCat
-					if(spec.recCatPrice()) {
+					if(spec.createCatPrice()) {
 						lblError.setText("Spectacle enregistré");
 					} else lblError.setText("Erreur lors de l'enregistrement des prix des places");
 				} else lblError.setText("Erreur lors de la modification du spectacle");

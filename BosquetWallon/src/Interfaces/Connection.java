@@ -65,7 +65,6 @@ public class Connection extends JFrame {
 		JTextField textFieldMail = new JTextField();
 		textFieldMail.setToolTipText("Email");
 		contentPane.add(textFieldMail, "cell 3 3,growx");
-textFieldMail.setText("haddock@gmail.com");
 		
 		JLabel lblMdp = new JLabel("Mot de passe");
 		contentPane.add(lblMdp, "cell 1 4");
@@ -73,7 +72,6 @@ textFieldMail.setText("haddock@gmail.com");
 		JPasswordField textFieldMdp = new JPasswordField();
 		textFieldMdp.setToolTipText("Mot de passe");
 		contentPane.add(textFieldMdp, "cell 3 4,growx");
-textFieldMdp.setText("1624974620");
 			
 		JLabel lblError = new JLabel("");
 		lblError.setHorizontalAlignment(SwingConstants.CENTER);
@@ -123,11 +121,7 @@ textFieldMdp.setText("1624974620");
 						win.setVisible(true);
 						dispose();
 					}
-				}
-				else {
-					lblError.setText("Erreur, vous êtes un artiste");
-				}
-				
+				} else lblError.setText("Erreur, vous êtes un artiste");
 			}
 		});
 		

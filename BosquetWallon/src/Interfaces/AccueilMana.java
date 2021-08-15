@@ -23,7 +23,7 @@ public class AccueilMana extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public AccueilMana(Manager gesti) {
+	public AccueilMana(Manager mana) {
 			setTitle("Bosquet Wallon - Accueil");
 			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			setBounds(100, 100, 600, 400);
@@ -32,7 +32,7 @@ public class AccueilMana extends JFrame {
 			setContentPane(contentPane);
 			contentPane.setLayout(new MigLayout("", "[20%,fill][20%,fill][20%,fill][20%,fill][20%,fill]", "[25%][][][][][][][][25%]"));
 			
-			JLabel lblBvn = new JLabel("Bienvenue " + gesti.getLastname() + " " + gesti.getFirstname());
+			JLabel lblBvn = new JLabel("Bienvenue " + mana.getLastname() + " " + mana.getFirstname());
 			lblBvn.setHorizontalAlignment(SwingConstants.CENTER);
 			lblBvn.setFont(new Font("Tahoma", Font.PLAIN, 20));
 			contentPane.add(lblBvn, "cell 0 1 5 1,alignx center,aligny center");
@@ -49,9 +49,9 @@ public class AccueilMana extends JFrame {
 			JButton btnPlanning = new JButton("Voir le planning");
 			btnPlanning.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-//					PlanningGest win = new PlanningGest(gesti);
-//					win.setVisible(true);
-//					dispose();
+					LstPlanningMana win = new LstPlanningMana(mana);
+					win.setVisible(true);
+					dispose();
 				}
 			});
 			contentPane.add(btnPlanning, "cell 1 4 3 1");

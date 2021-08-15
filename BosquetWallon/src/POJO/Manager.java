@@ -17,6 +17,7 @@ public class Manager extends Person {
 	}
 	public void setPassword(String password) {
 		this.password = password;
+		crypt();
 	}
 	public String getPhoneNumber() {
 		return phoneNumber;
@@ -29,9 +30,6 @@ public class Manager extends Person {
 		return super.toString() + " phoneNumber=" + phoneNumber;
 	}
 	
-	public boolean create() {
-		return dao.create(this);
-	}
 	public Manager getOne() {
 		return dao.get(this);
 	}

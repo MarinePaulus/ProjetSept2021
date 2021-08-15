@@ -1,10 +1,11 @@
 package Interfaces;
 
 import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -21,6 +22,7 @@ import POJO.Organizer;
 import POJO.Spectator;
 import net.miginfocom.swing.MigLayout;
 import com.toedter.calendar.JDateChooser;
+import java.text.SimpleDateFormat;
 
 @SuppressWarnings("serial")
 public class Registration extends JFrame {
@@ -41,28 +43,12 @@ public class Registration extends JFrame {
 	private JTextField textFieldMail;
 	private JLabel lblTel;
 	private JLabel lblGenre;
-	private JLabel lblNewLabel_3;
+	private JLabel lblNaiss;
 	@SuppressWarnings("rawtypes")
 	private JComboBox comboBoxGenre;
 	private JTextField textFieldTel;
 	private JDateChooser dateChooserNaiss;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Registration frame = new Registration();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
+	
 	/**
 	 * Create the frame.
 	 */
@@ -115,34 +101,51 @@ public class Registration extends JFrame {
 		contentPane.add(textFieldAdresse, "cell 2 5,growx");
 		textFieldAdresse.setColumns(10);
 		
+		lblTel = new JLabel("T\u00E9l\u00E9phone");
+		contentPane.add(lblTel, "cell 4 5,alignx trailing");
+		
+		textFieldTel = new JTextField();
+		textFieldTel.setColumns(10);
+		contentPane.add(textFieldTel, "cell 5 5,growx");
+		
 		lblRole = new JLabel("Role *");
-		contentPane.add(lblRole, "cell 4 5");
+		contentPane.add(lblRole, "cell 1 6");
 		
 		comboBox = new JComboBox();
 		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Spectateur", "Organisateur"}));
 		comboBox.setSelectedIndex(0);
-		contentPane.add(comboBox, "cell 5 5,growx");
-		
-		lblTel = new JLabel("T\u00E9l\u00E9phone");
-		contentPane.add(lblTel, "cell 1 6,alignx trailing");
-		
-		textFieldTel = new JTextField();
-		textFieldTel.setColumns(10);
-		contentPane.add(textFieldTel, "cell 2 6,growx");
+		comboBox.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				String role = (String) comboBox.getSelectedItem();
+				if(role.equals("Spectateur")) {
+					lblGenre.setVisible(true);
+					comboBoxGenre.setVisible(true);
+					lblNaiss.setVisible(true);
+					dateChooserNaiss.setVisible(true);
+				} else {
+					lblGenre.setVisible(false);
+					comboBoxGenre.setVisible(false);
+					lblNaiss.setVisible(false);
+					dateChooserNaiss.setVisible(false);
+				}
+			}
+		});
+		contentPane.add(comboBox, "cell 2 6,growx");
 		
 		lblGenre = new JLabel("Genre");
-		contentPane.add(lblGenre, "cell 4 6,alignx trailing");
+		contentPane.add(lblGenre, "cell 1 7,alignx trailing");
 		
 		comboBoxGenre = new JComboBox();
-		comboBoxGenre.setModel(new DefaultComboBoxModel(new String[] {"Femme", "Homme", "Autre", "Non spécifié"}));
+		comboBoxGenre.setModel(new DefaultComboBoxModel(new String[] {"Non spécifié", "Femme", "Homme", "Autres"}));
 		comboBoxGenre.setSelectedIndex(0);
-		contentPane.add(comboBoxGenre, "cell 5 6,growx");
+		contentPane.add(comboBoxGenre, "cell 2 7,growx");
 		
-		lblNewLabel_3 = new JLabel("Naissance");
-		contentPane.add(lblNewLabel_3, "cell 1 7");
+		lblNaiss = new JLabel("Naissance");
+		contentPane.add(lblNaiss, "cell 4 7");
 		
 		dateChooserNaiss = new JDateChooser();
-		contentPane.add(dateChooserNaiss, "cell 2 7 4 1,grow");
+		dateChooserNaiss.setDateFormatString("dd/MM/yyyy");
+		contentPane.add(dateChooserNaiss, "cell 5 7,grow");
 		
 		JLabel lblError = new JLabel("");
 		lblError.setHorizontalAlignment(SwingConstants.CENTER);
@@ -158,12 +161,29 @@ public class Registration extends JFrame {
 				if(!textFieldMail.getText().isEmpty() && textFieldMdp.getPassword().length!=0) {
 					if(role.equalsIgnoreCase("Spectateur")) {
 						Spectator cli = new Spectator();
+						cli.setFirstname(textFieldPrenom.getText());
+						cli.setLastname(textFieldNom.getText());
+						cli.setAdress(textFieldAdresse.getText());
+						cli.setEmailAddress(textFieldMail.getText());
+						cli.setPassword(String.valueOf(textFieldMdp.getPassword()));
+						cli.setPhoneNumber(textFieldTel.getText());
+						cli.setGender((String) comboBoxGenre.getSelectedItem());
+						SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+						String  strd = "";
+						if(dateChooserNaiss.getDate()!=null)
+							strd = formatter.format(dateChooserNaiss.getDate());
 						
+						cli.setBirthdate(strd);
 						ok = cli.create();
 					}
 					else {
 						Organizer orga = new Organizer();
-						
+						orga.setFirstname(textFieldPrenom.getText());
+						orga.setLastname(textFieldNom.getText());
+						orga.setAdress(textFieldAdresse.getText());
+						orga.setEmailAddress(textFieldMail.getText());
+						orga.setPassword(String.valueOf(textFieldMdp.getPassword()));
+						orga.setPhoneNumber(textFieldTel.getText());
 						ok = orga.create();
 					}
 					if(ok) lblError.setText("Inscription réussie, vous pouvez vous connecter");
